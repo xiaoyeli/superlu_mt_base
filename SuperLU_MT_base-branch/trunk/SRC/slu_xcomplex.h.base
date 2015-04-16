@@ -1,0 +1,84 @@
+@extract -b Typedef.inc
+/*
+ * -- SuperLU routine (version 2.0) --
+ * Lawrence Berkeley National Lab, Univ. of California Berkeley,
+ * and Xerox Palo Alto Research Center.
+ * September 10, 2007
+ *
+ */
+#ifndef __SUPERLU_@(MOD_PRE)COMPLEX /* allow multiple inclusions */
+#define __SUPERLU_@(MOD_PRE)COMPLEX
+
+/* 
+ * This header file is to be included in source files @(pre)*.c
+ */
+#ifndef @(MOD_PRE)COMPLEX_INCLUDE
+#define @(MOD_PRE)COMPLEX_INCLUDE
+
+typedef struct { @(mod_type) r, i; } @(type);
+
+
+/* Macro definitions */
+
+/* Complex Addition c = a + b */
+#define @(pre)_add(c, a, b) { (c)->r = (a)->r + (b)->r; \
+			 (c)->i = (a)->i + (b)->i; }
+
+/* Complex Subtraction c = a - b */
+#define @(pre)_sub(c, a, b) { (c)->r = (a)->r - (b)->r; \
+			 (c)->i = (a)->i - (b)->i; }
+
+/* Complex-Double Multiplication */
+#define @(pre)@(mod_pre)_mult(c, a, b) { (c)->r = (a)->r * (b); \
+                           (c)->i = (a)->i * (b); }
+
+/* Complex-Complex Multiplication */
+#define @(pre)@(pre)_mult(c, a, b) { \
+	@(mod_type) cr, ci; \
+    	cr = (a)->r * (b)->r - (a)->i * (b)->i; \
+    	ci = (a)->i * (b)->r + (a)->r * (b)->i; \
+    	(c)->r = cr; \
+    	(c)->i = ci; \
+    }
+
+#define @(pre)@(pre)_conj(a, b) { \
+        (a)->r = (b)->r; \
+        (a)->i = -((b)->i); \
+    }
+
+/* Complex equality testing */
+#define @(pre)_eq(a, b)  ( (a)->r == (b)->r && (a)->i == (b)->i )
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* Prototypes for functions in @(mod_pre)complex.c */
+void @(pre)_div(@(type) *, @(type) *, @(type) *);
+double @(pre)_abs(@(type) *);     /* exact */
+double @(pre)_abs1(@(type) *);    /* approximate */
+void @(pre)_exp(@(type) *, @(type) *);
+@precision SCOMPLEX
+void r_cnjg(@(type) *, @(type) *);
+double r_imag(@(type) *);
+@precision DCOMPLEX
+void d_cnjg(@(type) *r, @(type) *z);
+double d_imag(@(type) *);
+@precision !
+
+@precision REPLACED_BY_MACROS
+void @(pre)_add(@(type) *, @(type) *, @(type) *);
+void @(pre)_sub(@(type) *, @(type) *, @(type) *);
+void @(pre)@(mod_pre)_mult(@(type) *, @(type) *, @(mod_type) *);
+void @(pre)@(pre)_mult(@(type) *, @(type) *, @(type) *);
+int @(pre)_eq(@(type) *, @(type) *);
+@precision !
+
+#ifdef __cplusplus
+  }
+#endif
+
+#endif
+
+#endif  /* __SUPERLU_@(MOD_PRE)COMPLEX */

@@ -1,0 +1,291 @@
+@extract -b Typedef.inc
+/*
+ * -- SuperLU routine (version 2.0) --
+ * Lawrence Berkeley National Lab, Univ. of California Berkeley,
+ * and Xerox Palo Alto Research Center.
+ * September 10, 2007
+ *
+ */
+#include <math.h>
+#include "slu_mt_Cnames.h"
+#include "slu_mt_util.h"
+@precision SCOMPLEX DCOMPLEX
+#include "slu_@(mod_pre)complex.h"
+@precision !
+
+int
+@precision SINGLE DOUBLE
+@(pre)lacon_(int *n, @(type) *v, @(type) *x, int *isgn, @(type) *est, int *kase)
+@precision SCOMPLEX DCOMPLEX
+@(pre)lacon_(int *n, @(type) *v, @(type) *x, @(mod_type) *est, int *kase)
+@precision !
+
+{
+/*
+    Purpose   
+    =======   
+
+    @(PRE)LACON estimates the 1-norm of a square matrix A.   
+    Reverse communication is used for evaluating matrix-vector products. 
+  
+
+    Arguments   
+    =========   
+
+    N      (input) INT
+           The order of the matrix.  N >= 1.   
+
+    V      (workspace) @(TYPE) PRECISION array, dimension (N)   
+           On the final return, V = A*W,  where  EST = norm(V)/norm(W)   
+           (W is not returned).   
+
+    X      (input/output) @(TYPE) PRECISION array, dimension (N)   
+           On an intermediate return, X should be overwritten by   
+                 A * X,   if KASE=1,   
+                 A' * X,  if KASE=2,
+@precision SCOMPLEX DCOMPLEX
+           where A' is the conjugate transpose of A,
+@precision !
+           and @(PRE)LACON must be re-called with all the other parameters   
+           unchanged.   
+
+@precision SINGLE DOUBLE
+    ISGN   (workspace) INT array, dimension (N)
+@precision !
+
+    EST    (output) @(MOD_TYPE) PRECISION   
+           An estimate (a lower bound) for norm(A).   
+
+    KASE   (input/output) INT
+           On the initial call to @(PRE)LACON, KASE should be 0.   
+           On an intermediate return, KASE will be 1 or 2, indicating   
+           whether X should be overwritten by A * X  or A' * X.   
+           On the final return from @(PRE)LACON, KASE will again be 0.   
+
+    Further Details   
+    ======= =======   
+
+    Contributed by Nick Higham, University of Manchester.   
+    Originally named CONEST, dated March 16, 1988.   
+
+    Reference: N.J. Higham, "FORTRAN codes for estimating the one-norm of 
+    a real or complex matrix, with applications to condition estimation", 
+    ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988.   
+    ===================================================================== 
+*/
+
+    /* Table of constant values */
+    int c__1 = 1;
+@precision SINGLE DOUBLE
+    @(type)      zero = 0.0;
+    @(type)      one = 1.0;
+@precision SCOMPLEX DCOMPLEX
+    @(type)      zero = {0.0, 0.0};
+    @(type)      one = {1.0, 0.0};
+
+    /* System generated locals */
+    @(mod_type) d__1;
+@precision !
+    
+    /* Local variables */
+    static int iter;
+    static int jump, jlast;
+    static @(mod_type) altsgn, estold;
+    static int i, j;
+    @(mod_type) temp;
+@precision SCOMPLEX DCOMPLEX
+    @(mod_type) safmin;
+    extern double @(mod_pre)lamch_(char *);
+@precision !
+@precision SINGLE DOUBLE
+    extern int i@(pre)amax_(int *, @(type) *, int *);
+    extern @(type) @(pre)asum_(int *, @(type) *, int *);
+    extern int @(pre)copy_(int *, @(type) *, int *, @(type) *, int *);
+@precision SCOMPLEX DCOMPLEX
+    extern int i@(pre)max1_(int *, @(type) *, int *);
+    extern double @(mod_pre)@(pre)sum1_(int *, @(type) *, int *);
+@precision ! 
+@precision SINGLE DOUBLE
+#define d_sign(a, b) (b >= 0 ? fabs(a) : -fabs(a))    /* Copy sign */
+#define i_dnnt(a) \
+	( a>=0 ? floor(a+.5) : -floor(.5-a) ) /* Round to nearest integer */
+@precision !
+
+@precision SCOMPLEX DCOMPLEX
+    safmin = @(mod_pre)lamch_("Safe minimum");
+@precision !
+    if ( *kase == 0 ) {
+	for (i = 0; i < *n; ++i) {
+@precision SINGLE DOUBLE
+	    x[i] = 1. / (@(mod_type)) (*n);
+@precision SCOMPLEX DCOMPLEX
+	    x[i].r = 1. / (@(mod_type)) (*n);
+	    x[i].i = 0.;
+@precision !	
+	}
+	*kase = 1;
+	jump = 1;
+	return 0;
+    }
+
+    switch (jump) {
+	case 1:  goto L20;
+	case 2:  goto L40;
+	case 3:  goto L70;
+	case 4:  goto L110;
+	case 5:  goto L140;
+    }
+
+    /*     ................ ENTRY   (JUMP = 1)   
+	   FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY A*X. */
+  L20:
+    if (*n == 1) {
+	v[0] = x[0];
+@precision SINGLE DOUBLE
+	*est = fabs(v[0]);
+@precision SCOMPLEX DCOMPLEX
+	*est = @(pre)_abs(&v[0]);
+@precision !
+	/*        ... QUIT */
+	goto L150;
+    }
+@precision SINGLE DOUBLE
+    *est = @(pre)asum_(n, x, &c__1);
+@precision SCOMPLEX DCOMPLEX
+    *est = @(mod_pre)@(pre)sum1_(n, x, &c__1);
+@precision !
+
+    for (i = 0; i < *n; ++i) {
+@precision SINGLE DOUBLE
+	x[i] = d_sign(one, x[i]);
+	isgn[i] = i_dnnt(x[i]);
+@precision SCOMPLEX DCOMPLEX
+	d__1 = @(pre)_abs(&x[i]);
+	if (d__1 > safmin) {
+	    d__1 = 1 / d__1;
+	    x[i].r *= d__1;
+	    x[i].i *= d__1;
+	} else {
+	    x[i] = one;
+	}
+@precision !
+    }
+    *kase = 2;
+    jump = 2;
+    return 0;
+
+    /*     ................ ENTRY   (JUMP = 2)   
+	   FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
+L40:
+@precision SINGLE DOUBLE
+    j = i@(pre)amax_(n, &x[0], &c__1);
+@precision SCOMPLEX DCOMPLEX
+    j = i@(pre)max1_(n, &x[0], &c__1);
+@precision !
+    --j;
+    iter = 2;
+
+    /*     MAIN LOOP - ITERATIONS 2,3,...,ITMAX. */
+L50:
+    for (i = 0; i < *n; ++i) x[i] = zero;
+    x[j] = one;
+    *kase = 1;
+    jump = 3;
+    return 0;
+
+    /*     ................ ENTRY   (JUMP = 3)   
+	   X HAS BEEN OVERWRITTEN BY A*X. */
+L70:
+    @(pre)copy_(n, &x[0], &c__1, &v[0], &c__1);
+    estold = *est;
+@precision SINGLE DOUBLE
+    *est = @(pre)asum_(n, v, &c__1);
+@precision SCOMPLEX DCOMPLEX
+    *est = @(mod_pre)@(pre)sum1_(n, v, &c__1);
+@precision !
+
+@precision SINGLE DOUBLE
+    for (i = 0; i < *n; ++i)
+	if (i_dnnt(d_sign(one, x[i])) != isgn[i])
+	    goto L90;
+
+    /*     REPEATED SIGN VECTOR DETECTED, HENCE ALGORITHM HAS CONVERGED. */
+    goto L120;
+@precision !
+
+L90:
+    /*     TEST FOR CYCLING. */
+    if (*est <= estold) goto L120;
+
+    for (i = 0; i < *n; ++i) {
+@precision SINGLE DOUBLE
+	x[i] = d_sign(one, x[i]);
+	isgn[i] = i_dnnt(x[i]);
+@precision SCOMPLEX DCOMPLEX
+	d__1 = @(pre)_abs(&x[i]);
+	if (d__1 > safmin) {
+	    d__1 = 1 / d__1;
+	    x[i].r *= d__1;
+	    x[i].i *= d__1;
+	} else {
+	    x[i] = one;
+	}
+@precision !
+    }
+    *kase = 2;
+    jump = 4;
+    return 0;
+
+    /*     ................ ENTRY   (JUMP = 4)   
+	   X HAS BEEN OVERWRITTEN BY TRANDPOSE(A)*X. */
+L110:
+    jlast = j;
+@precision SINGLE DOUBLE
+    j = i@(pre)amax_(n, &x[0], &c__1);
+@precision SCOMPLEX DCOMPLEX
+    j = i@(pre)max1_(n, &x[0], &c__1);
+@precision !
+    --j;
+@precision SINGLE DOUBLE
+    if (x[jlast] != fabs(x[j]) && iter < 5) {
+@precision SCOMPLEX DCOMPLEX
+    if (x[jlast].r != (d__1 = x[j].r, fabs(d__1)) && iter < 5) {
+@precision !
+	++iter;
+	goto L50;
+    }
+
+    /*     ITERATION COMPLETE.  FINAL STAGE. */
+L120:
+    altsgn = 1.;
+    for (i = 1; i <= *n; ++i) {
+@precision SINGLE DOUBLE
+	x[i-1] = altsgn * ((@(mod_type)) (i - 1) / (@(mod_type)) (*n - 1) + 1.);
+@precision SCOMPLEX DCOMPLEX
+	x[i-1].r = altsgn * ((@(mod_type)) (i - 1) / (@(mod_type)) (*n - 1) + 1.);
+	x[i-1].i = 0.;
+@precision !
+	altsgn = -altsgn;
+    }
+    *kase = 1;
+    jump = 5;
+    return 0;
+    
+    /*     ................ ENTRY   (JUMP = 5)   
+	   X HAS BEEN OVERWRITTEN BY A*X. */
+L140:
+@precision SINGLE DOUBLE
+    temp = @(pre)asum_(n, x, &c__1) / (@(mod_type)) (*n * 3) * 2.;
+@precision SCOMPLEX DCOMPLEX
+    temp = @(mod_pre)@(pre)sum1_(n, x, &c__1) / (@(mod_type)) (*n * 3) * 2.;
+@precision !
+    if (temp > *est) {
+	@(pre)copy_(n, &x[0], &c__1, &v[0], &c__1);
+	*est = temp;
+    }
+
+L150:
+    *kase = 0;
+    return 0;
+
+} /* @(pre)lacon_ */

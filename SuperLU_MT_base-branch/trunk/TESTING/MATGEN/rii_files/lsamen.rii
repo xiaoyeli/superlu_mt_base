@@ -1,0 +1,4 @@
+CMDLINE=cc -DEFAULT:abi=n32:isa=mips4:proc=r10k -D_SGI -O3 -mp -mips4 -64 -DAdd_ -c lsamen.c
+PWD=/u1/xiaoye/SuperLU_MT_1.0/TESTING/MATGEN
+----
+----

@@ -1,6 +1,0 @@
-CMDLINE=cc -DEFAULT:abi=n32:isa=mips4:proc=r10k -D_SGI -O3 -mp -mips4 -64 -DAdd_ -c dlarot.c
-PWD=/u1/xiaoye/SuperLU_MT_1.0/TESTING/MATGEN
-----
-----
-xt 16
-yt 16

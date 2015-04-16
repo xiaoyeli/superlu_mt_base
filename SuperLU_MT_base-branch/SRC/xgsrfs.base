@@ -5,9 +5,9 @@
 
 void
 @(pre)gsrfs(trans_t trans, SuperMatrix *A, SuperMatrix *L, SuperMatrix *U,
-       int *perm_r, int *perm_c, equed_t equed, @(mod_type) *R, @(mod_type) *C,
+       int_t *perm_r, int_t *perm_c, equed_t equed, @(mod_type) *R, @(mod_type) *C,
        SuperMatrix *B, SuperMatrix *X, @(mod_type) *ferr, @(mod_type) *berr,
-       Gstat_t *Gstat, int *info)
+       Gstat_t *Gstat, int_t *info)
 {
 /*
  * -- SuperLU MT routine (version 2.0) --
@@ -49,11 +49,11 @@ void
  *         dgstrf(). Use column-wise storage scheme,
  *         i.e., U has types: Stype = NCP, Dtype = _D, Mtype = TRU.
  *
- * perm_r  (input) int*, dimension (A->nrow)
+ * perm_r  (input) int_t*, dimension (A->nrow)
  *         Row permutation vector, which defines the permutation matrix Pr;
  *         perm_r[i] = j means row i of A is in position j in Pr*A.
  *
- * perm_c  (input) int*, dimension (A->ncol)
+ * perm_c  (input) int_t*, dimension (A->ncol)
  *         Column permutation vector, which defines the
  *         permutation matrix Pc; perm_c[i] = j means column i of A is 
  *         in position j in A*Pc.
@@ -101,7 +101,7 @@ void
  *         vector X(j) (i.e., the smallest relative change in
  *         any element of A or B that makes X(j) an exact solution).
  *
- * info    (output) int*
+ * info    (output) int_t*
  *         = 0:  successful exit
  *         < 0:  if INFO = -i, the i-th argument had an illegal value
  *
@@ -130,25 +130,25 @@ void
     SuperMatrix Bjcol;
     DNformat *Bstore, *Xstore, *Bjcol_store;
     @(type)   *Bmat, *Xmat, *Bptr, *Xptr;
-    int      kase;
+    int_t      kase;
     @(mod_type)   safe1, safe2;
-    int      i, j, k, irow, nz, count, notran, rowequ, colequ;
-    int      ldb, ldx, nrhs;
+    int_t      i, j, k, irow, nz, count, notran, rowequ, colequ;
+    int_t      ldb, ldx, nrhs;
     @(mod_type)   s, xk, lstres, eps, safmin;
     char     transc[1];
     trans_t  transt;
     @(type)   *work;
     @(mod_type)   *rwork;
-    int      *iwork;
+    int_t      *iwork;
 @precision DOUBLE DCOMPLEX
     extern double dlamch_(char *);
 @precision SINGLE SCOMPLEX
     extern double slamch_(char *);
 @precision !
 @precision DOUBLE SINGLE
-    extern int @(pre)lacon_(int *, @(type) *, @(type) *, int *, @(mod_type) *, int *);
+    extern int_t @(pre)lacon_(int_t *, @(type) *, @(type) *, int_t *, @(mod_type) *, int_t *);
 @precision DCOMPLEX SCOMPLEX
-    extern int @(pre)lacon_(int *, @(type) *, @(type) *, @(mod_type) *, int *);
+    extern int_t @(pre)lacon_(int_t *, @(type) *, @(type) *, @(mod_type) *, int_t *);
 @precision !
 #ifdef _CRAY
     extern int @(SC_PRE)COPY(int *, @(type) *, int *, @(type) *, int *);

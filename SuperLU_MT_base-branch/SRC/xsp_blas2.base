@@ -17,14 +17,14 @@
 /* 
  * Function prototypes 
  */
-extern void @(pre)usolve(int, int, @(type)*, @(type)*);
-extern void @(pre)lsolve(int, int, @(type)*, @(type)*);
-extern void @(pre)matvec(int, int, int, @(type)*, @(type)*, @(type)*);
+extern void @(pre)usolve(int_t, int_t, @(type)*, @(type)*);
+extern void @(pre)lsolve(int_t, int_t, @(type)*, @(type)*);
+extern void @(pre)matvec(int_t, int_t, int_t, @(type)*, @(type)*, @(type)*);
 
 
-int
+int_t
 sp_@(pre)trsv(char *uplo, char *trans, char *diag, SuperMatrix *L, 
-         SuperMatrix *U, @(type) *x, int *info)
+         SuperMatrix *U, @(type) *x, int_t *info)
 {
 /*
  *   Purpose
@@ -78,7 +78,7 @@ sp_@(pre)trsv(char *uplo, char *trans, char *diag, SuperMatrix *L,
  *             element right-hand side vector b. On exit, X is overwritten 
  *             with the solution vector x.
  *
- *   info    - (output) int*
+ *   info    - (output) int_t*
  *             If *info = -i, the i-th argument had an illegal value.
  *
  */
@@ -96,7 +96,7 @@ sp_@(pre)trsv(char *uplo, char *trans, char *diag, SuperMatrix *L,
     @(type) alpha = {1.0, 0.0}, beta = {1.0, 0.0};
     @(type) comp_zero = {0.0, 0.0};
 @precision !
-    register int fsupc, luptr, istart, irow, k, iptr, jcol, nsuper;
+    register int_t fsupc, luptr, istart, irow, k, iptr, jcol, nsuper;
     int          nsupr, nsupc, nrow, i;
     @(type) *work;
     flops_t solve_ops;
@@ -517,7 +517,7 @@ sp_@(pre)trsv(char *uplo, char *trans, char *diag, SuperMatrix *L,
 
 @precision DOUBLE SINGLE
 
-int
+int_t
 sp_@(pre)gemv(char *trans, @(type) alpha, SuperMatrix *A, @(type) *x, 
 	 int incx, @(type) beta, @(type) *y, int incy)
 {
@@ -581,11 +581,11 @@ sp_@(pre)gemv(char *trans, @(type) alpha, SuperMatrix *A, @(type) *x,
     /* Local variables */
     NCformat *Astore;
     @(type)   *Aval;
-    int info;
+    int_t info;
     @(type) temp;
-    int lenx, leny, i, j, irow;
-    int iy, jx, jy, kx, ky;
-    int notran;
+    int_t lenx, leny, i, j, irow;
+    int_t iy, jx, jy, kx, ky;
+    int_t notran;
 
     notran = lsame_(trans, "N");
     Astore = A->Store;
@@ -748,11 +748,11 @@ sp_@(pre)gemv(char *trans, @(type) alpha, SuperMatrix *A, @(type) *x,
     /* Local variables */
     NCformat *Astore;
     @(type)   *Aval;
-    int info;
+    int_t info;
     @(type) temp, temp1;
-    int lenx, leny, i, j, irow;
-    int iy, jx, jy, kx, ky;
-    int notran;
+    int_t lenx, leny, i, j, irow;
+    int_t iy, jx, jy, kx, ky;
+    int_t notran;
     @(type) comp_zero = {0.0, 0.0};
     @(type) comp_one = {1.0, 0.0};
 

@@ -1,6 +1,6 @@
 @extract -b Typedef.inc
 /*
- * -- SuperLU MT routine (version 2.0) --
+ * -- SuperLU MT routine (version 3.0) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley,
  * and Xerox Palo Alto Research Center.
  * September 10, 2007
@@ -12,7 +12,7 @@
 
 void
 @(pre)gsequ(SuperMatrix *A, @(mod_type) *r, @(mod_type) *c, @(mod_type) *rowcnd,
-        @(mod_type) *colcnd, @(mod_type) *amax, int *info)
+        @(mod_type) *colcnd, @(mod_type) *amax, int_t *info)
 {
 /*    
     Purpose   
@@ -62,7 +62,7 @@ void
             close to overflow or very close to underflow, the matrix   
             should be scaled.
 	    
-    INFO    (output) int*
+    INFO    (output) int_t*
             = 0:  successful exit   
             < 0:  if INFO = -i, the i-th argument had an illegal value   
             > 0:  if INFO = i,  and i is   
@@ -75,7 +75,7 @@ void
     /* Local variables */
     NCformat *Astore;
     @(type)   *Aval;
-    int i, j, irow;
+    int_t i, j, irow;
     @(mod_type) rcmin, rcmax;
     @(mod_type) bignum, smlnum;
 @precision DOUBLE DCOMPLEX

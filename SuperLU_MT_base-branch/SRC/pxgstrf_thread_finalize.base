@@ -9,7 +9,7 @@ p@(pre)gstrf_thread_finalize(p@(pre)gstrf_threadarg_t *p@(pre)gstrf_threadarg,
 			)
 {
 /*
- * -- SuperLU MT routine (version 2.0) --
+ * -- SuperLU MT routine (version 3.0) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley,
  * and Xerox Palo Alto Research Center.
  * September 10, 2007
@@ -40,7 +40,7 @@ p@(pre)gstrf_thread_finalize(p@(pre)gstrf_threadarg_t *p@(pre)gstrf_threadarg,
  *          (A->nrow, A->ncol). The type of A can be:
  *          Stype = NCP; Dtype = _D; Mtype = GE.
  *
- * perm_r   (input) int*, dimension A->nrow
+ * perm_r   (input) int_t*, dimension A->nrow
  *          Row permutation vector which defines the permutation matrix Pr,
  *          perm_r[i] = j means row i of A is in position j in Pr*A.
  *
@@ -56,8 +56,8 @@ p@(pre)gstrf_thread_finalize(p@(pre)gstrf_threadarg_t *p@(pre)gstrf_threadarg,
  *
  *
  */
-    register int nprocs, n, i, iinfo;
-    int       nnzL, nnzU;
+    register int_t nprocs, n, i, iinfo;
+    int_t       nnzL, nnzU;
     superlumt_options_t *superlumt_options;
     GlobalLU_t *Glu;
     extern ExpHeader *@(pre)expanders;

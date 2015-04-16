@@ -1,6 +1,6 @@
 @extract -b Typedef.inc
 /*
- * -- SuperLU routine (version 2.0) --
+ * -- SuperLU routine (version 3.0) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley,
  * and Xerox Palo Alto Research Center.
  * September 10, 2007
@@ -23,13 +23,13 @@
  * triangular matrix is stored in a 2D array M(1:nrow,1:ncol). 
  * The solution will be returned in the rhs vector.
  */
-void @(pre)lsolve ( int ldm, int ncol, @(type) *M, @(type) *rhs )
+void @(pre)lsolve ( int_t ldm, int_t ncol, @(type) *M, @(type) *rhs )
 {
-    int k;
+    int_t k;
     @(type) x0, x1, x2, x3, x4, x5, x6, x7;
     @(type) *M0;
     register @(type) *Mki0, *Mki1, *Mki2, *Mki3, *Mki4, *Mki5, *Mki6, *Mki7;
-    register int firstcol = 0;
+    register int_t firstcol = 0;
 
     M0 = &M[0];
 
@@ -122,14 +122,14 @@ void @(pre)lsolve ( int ldm, int ncol, @(type) *M, @(type) *rhs )
  */
 void
 @(pre)usolve (
-int ldm,     /* in */
-int ncol,    /* in */
+int_t ldm,     /* in */
+int_t ncol,    /* in */
 @(type) *M,  /* in */
 @(type) *rhs /* modified */
 )
 {
     @(type) xj;
-    int jcol, j, irow;
+    int_t jcol, j, irow;
 
     jcol = ncol - 1;
 
@@ -152,9 +152,9 @@ int ncol,    /* in */
  * The input matrix is M(1:nrow,1:ncol); The product is returned in Mxvec[].
  */
 void @(pre)matvec (
-int ldm,	/* in -- leading dimension of M */
-int nrow,	/* in */ 
-int ncol,	/* in */
+int_t ldm,	/* in -- leading dimension of M */
+int_t nrow,	/* in */ 
+int_t ncol,	/* in */
 @(type) *M,	/* in */
 @(type) *vec,	/* in */
 @(type) *Mxvec	/* in/out */
@@ -163,8 +163,8 @@ int ncol,	/* in */
     @(type) vi0, vi1, vi2, vi3, vi4, vi5, vi6, vi7;
     @(type) *M0;
     register @(type) *Mki0, *Mki1, *Mki2, *Mki3, *Mki4, *Mki5, *Mki6, *Mki7;
-    register int firstcol = 0;
-    int k;
+    register int_t firstcol = 0;
+    int_t k;
 
     M0 = &M[0];
     while ( firstcol < ncol - 7 ) {	/* Do 8 columns */
@@ -232,9 +232,9 @@ int ncol,	/* in */
  *        y1 = y1 + A * x1
  */
 void @(pre)matvec2 (
-               int lda,     /* leading dimension of A */
-               int m,
-               int n,
+               int_t lda,     /* leading dimension of A */
+               int_t m,
+               int_t n,
                @(type) *A,   /* in - size m-by-n */
                @(type) *x0,  /* in - size n-by-1 */
                @(type) *x1,  /* in - size n-by-1 */
@@ -248,9 +248,9 @@ void @(pre)matvec2 (
     register @(type) t0, t1, t2, t3, t4, t5, t6, t7;
     register @(type) f0, f1;
     @(type) *Mki0, *Mki1, *Mki2, *Mki3, *Mki4, *Mki5, *Mki6, *Mki7;
-    register int firstcol = 0;
+    register int_t firstcol = 0;
     @(type) *M0;
-    int k;
+    int_t k;
 
     M0 = &A[0];
 
@@ -345,13 +345,13 @@ void @(pre)matvec2 (
  * triangular matrix is stored in a 2D array M(1:nrow,1:ncol). 
  * The solution will be returned in the rhs vector.
  */
-void @(pre)lsolve ( int ldm, int ncol, @(type) *M, @(type) *rhs )
+void @(pre)lsolve ( int_t ldm, int_t ncol, @(type) *M, @(type) *rhs )
 {
-    int k;
+    int_t k;
     @(type) x0, x1, x2, x3, temp;
     @(type) *M0;
     @(type) *Mki0, *Mki1, *Mki2, *Mki3;
-    register int firstcol = 0;
+    register int_t firstcol = 0;
 
     M0 = &M[0];
 
@@ -423,14 +423,14 @@ void @(pre)lsolve ( int ldm, int ncol, @(type) *M, @(type) *rhs )
  */
 void
 @(pre)usolve (
-int ldm,	/* in */
-int ncol,	/* in */
+int_t ldm,	/* in */
+int_t ncol,	/* in */
 @(type) *M,	/* in */
 @(type) *rhs	/* modified */
 )
 {
     @(type) xj, temp;
-    int jcol, j, irow;
+    int_t jcol, j, irow;
 
     jcol = ncol - 1;
 
@@ -455,9 +455,9 @@ int ncol,	/* in */
  * The input matrix is M(1:nrow,1:ncol); The product is returned in Mxvec[].
  */
 void @(pre)matvec (
-int ldm,	/* in -- leading dimension of M */
-int nrow,	/* in */ 
-int ncol,	/* in */
+int_t ldm,	/* in -- leading dimension of M */
+int_t nrow,	/* in */ 
+int_t ncol,	/* in */
 @(type) *M,	/* in */
 @(type) *vec,	/* in */
 @(type) *Mxvec	/* in/out */
@@ -466,8 +466,8 @@ int ncol,	/* in */
     @(type) vi0, vi1, vi2, vi3;
     @(type) *M0, temp;
     @(type) *Mki0, *Mki1, *Mki2, *Mki3;
-    register int firstcol = 0;
-    int k;
+    register int_t firstcol = 0;
+    int_t k;
 
     M0 = &M[0];
 

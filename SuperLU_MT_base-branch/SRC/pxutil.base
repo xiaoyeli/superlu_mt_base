@@ -1,6 +1,6 @@
 @extract -b Typedef.inc
 /*
- * -- SuperLU MT routine (version 2.0) --
+ * -- SuperLU MT routine (version 3.0) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley,
  * and Xerox Palo Alto Research Center.
  * September 10, 2007
@@ -10,8 +10,8 @@
 #include "p@(pre)sp_defs.h"
 
 void
-@(pre)Create_CompCol_Matrix(SuperMatrix *A, int m, int n, int nnz, @(type) *nzval,
-		      int *rowind, int *colptr,
+@(pre)Create_CompCol_Matrix(SuperMatrix *A, int_t m, int_t n, int_t nnz, @(type) *nzval,
+		      int_t *rowind, int_t *colptr,
 		      Stype_t stype, Dtype_t dtype, Mtype_t mtype)
 {
     NCformat *Astore;
@@ -30,8 +30,8 @@ void
 }
 
 void
-@(pre)Create_CompCol_Permuted(SuperMatrix *A, int m, int n, int nnz, @(type) *nzval,
-			 int *rowind, int *colbeg, int *colend,
+@(pre)Create_CompCol_Permuted(SuperMatrix *A, int_t m, int_t n, int_t nnz, @(type) *nzval,
+			 int_t *rowind, int_t *colbeg, int_t *colend,
 			 Stype_t stype, Dtype_t dtype, Mtype_t mtype)
 {
     NCPformat *Astore;
@@ -50,21 +50,21 @@ void
     Astore->colend = colend;
 }
 /*
- * Convert a row compressed storage into a column compressed storage.
+ * Convert a row compressed storage int_to a column compressed storage.
  */
 void
-@(pre)CompRow_to_CompCol(int m, int n, int nnz, 
-		    @(type) *a, int *colind, int *rowptr,
-		    @(type) **at, int **rowind, int **colptr)
+@(pre)CompRow_to_CompCol(int_t m, int_t n, int_t nnz, 
+		    @(type) *a, int_t *colind, int_t *rowptr,
+		    @(type) **at, int_t **rowind, int_t **colptr)
 {
-    register int i, j, col, relpos;
-    int *marker;
+    register int_t i, j, col, relpos;
+    int_t *marker;
 
     /* Allocate storage for another copy of the matrix. */
     *at = (@(type) *) @(type)Malloc(nnz);
-    *rowind = (int *) intMalloc(nnz);
-    *colptr = (int *) intMalloc(n+1);
-    marker = (int *) intCalloc(n);
+    *rowind = intMalloc(nnz);
+    *colptr = intMalloc(n+1);
+    marker = intCalloc(n);
     
     /* Get counts of each column of A, and set up column pointers */
     for (i = 0; i < m; ++i)
@@ -95,7 +95,7 @@ void
 @(pre)Copy_CompCol_Matrix(SuperMatrix *A, SuperMatrix *B)
 {
     NCformat *Astore, *Bstore;
-    int      ncol, nnz, i;
+    int_t      ncol, nnz, i;
 
     B->Stype = A->Stype;
     B->Dtype = A->Dtype;
@@ -112,10 +112,10 @@ void
 }
 
 
-int @(pre)Print_CompCol_Matrix(SuperMatrix *A)
+int_t @(pre)Print_CompCol_Matrix(SuperMatrix *A)
 {
     NCformat     *Astore;
-    register int i;
+    register int_t i;
     @(type)       *dp;
     
     printf("\nCompCol matrix: ");
@@ -139,10 +139,10 @@ int @(pre)Print_CompCol_Matrix(SuperMatrix *A)
     return 0;
 }
 
-int @(pre)Print_CCS_to_triplets(SuperMatrix *A)
+int_t @(pre)Print_CCS_to_triplets(SuperMatrix *A)
 {
     NCformat     *Astore;
-    register int i, j;
+    register int_t i, j;
     @(type)       *dp;
     
     Astore = (NCformat *) A->Store;
@@ -161,10 +161,10 @@ int @(pre)Print_CCS_to_triplets(SuperMatrix *A)
     return 0;
 }
 
-int @(pre)Print_Dense_Matrix(SuperMatrix *A)
+int_t @(pre)Print_Dense_Matrix(SuperMatrix *A)
 {
     DNformat     *Astore;
-    register int i;
+    register int_t i;
     @(mod_type)       *dp;
     
     printf("\nDense matrix: ");
@@ -184,7 +184,7 @@ int @(pre)Print_Dense_Matrix(SuperMatrix *A)
 }
 
 void
-@(pre)Create_Dense_Matrix(SuperMatrix *X, int m, int n, @(type) *x, int ldx,
+@(pre)Create_Dense_Matrix(SuperMatrix *X, int_t m, int_t n, @(type) *x, int_t ldx,
 		    Stype_t stype, Dtype_t dtype, Mtype_t mtype)
 {
     DNformat    *Xstore;
@@ -201,7 +201,7 @@ void
 }
 
 void
-@(pre)Copy_Dense_Matrix(int M, int N, @(type) *X, int ldx, @(type) *Y, int ldy)
+@(pre)Copy_Dense_Matrix(int_t M, int_t N, @(type) *X, int_t ldx, @(type) *Y, int_t ldy)
 {
 /*
  *
@@ -210,7 +210,7 @@ void
  *
  *  Copies a two-dimensional matrix X to another matrix Y.
  */
-    int    i, j;
+    int_t    i, j;
     
     for (j = 0; j < N; ++j)
         for (i = 0; i < M; ++i)
@@ -218,9 +218,9 @@ void
 }
 
 void
-@(pre)Create_SuperNode_Matrix(SuperMatrix *L, int m, int n, int nnz, @(type) *nzval,
-			int *nzval_colptr, int *rowind, int *rowind_colptr,
-			int *col_to_sup, int *sup_to_col,
+@(pre)Create_SuperNode_Matrix(SuperMatrix *L, int_t m, int_t n, int_t nnz, @(type) *nzval,
+			int_t *nzval_colptr, int_t *rowind, int_t *rowind_colptr,
+			int_t *col_to_sup, int_t *sup_to_col,
 			Stype_t stype, Dtype_t dtype, Mtype_t mtype)
 {
     SCformat *Lstore;
@@ -244,12 +244,12 @@ void
 }
 
 void
-@(pre)Create_SuperNode_Permuted(SuperMatrix *L, int m, int n, int nnz,
+@(pre)Create_SuperNode_Permuted(SuperMatrix *L, int_t m, int_t n, int_t nnz,
 			   @(type) *nzval, 
-			   int *nzval_colbeg, int *nzval_colend,
-			   int *rowind, int *rowind_colbeg, int *rowind_colend,
-			   int *col_to_sup, 
-			   int *sup_to_colbeg, int *sup_to_colend,
+			   int_t *nzval_colbeg, int_t *nzval_colend,
+			   int_t *rowind, int_t *rowind_colbeg, int_t *rowind_colend,
+			   int_t *col_to_sup, 
+			   int_t *sup_to_colbeg, int_t *sup_to_colend,
 			   Stype_t stype, Dtype_t dtype, Mtype_t mtype)
 {
     SCPformat *Lstore;
@@ -280,14 +280,14 @@ void
  * Diagnostic print of column "jcol" in the U/L factor.
  */
 void
-@(pre)print_lu_col(int pnum, char *msg, int pcol, int jcol, int w, int pivrow,
-	      int *xprune, GlobalLU_t *Glu)
+@(pre)print_lu_col(int_t pnum, char *msg, int_t pcol, int_t jcol, int_t w, int_t pivrow,
+	      int_t *xprune, GlobalLU_t *Glu)
 {
-    int     i, k, fsupc;
-    int     *xsup, *supno;
-    int     *xlsub, *xlsub_end, *lsub;
+    int_t     i, k, fsupc;
+    int_t     *xsup, *supno;
+    int_t     *xlsub, *xlsub_end, *lsub;
     @(type)  *lusup;
-    int     *xlusup, *xlusup_end;
+    int_t     *xlusup, *xlusup_end;
 
     xsup    = Glu->xsup;
     supno   = Glu->supno;
@@ -327,9 +327,9 @@ void
  * numeric update routines, such as "panel_bmod" and "column_bmod". 
  */
 void
-@(pre)check_zero_vec(int pnum, char *msg, int n, @(type) *vec)
+@(pre)check_zero_vec(int_t pnum, char *msg, int_t n, @(type) *vec)
 {
-    register int i, nonzero;
+    register int_t i, nonzero;
 
     nonzero = FALSE;
     for (i = 0; i < n; ++i) {
@@ -358,9 +358,9 @@ void
 
 
 void
-@(pre)GenXtrue(int n, int nrhs, @(type) *x, int ldx)
+@(pre)GenXtrue(int_t n, int_t nrhs, @(type) *x, int_t ldx)
 {
-    int  i, j;
+    int_t  i, j;
     for (j = 0; j < nrhs; ++j) {
 	for (i = 0; i < n; ++i) {
 @precision DOUBLE SINGLE
@@ -377,7 +377,7 @@ void
  * Let rhs[i] = sum of i-th row of A, so the solution vector is all 1's
  */
 void
-@(pre)FillRHS(trans_t trans, int nrhs, @(type) *x, int ldx, SuperMatrix *A, SuperMatrix *B)
+@(pre)FillRHS(trans_t trans, int_t nrhs, @(type) *x, int_t ldx, SuperMatrix *A, SuperMatrix *B)
 {
     NCformat *Astore;
     @(type)   *Aval;
@@ -390,7 +390,7 @@ void
     @(type) one = {1.0, 0.0};
     @(type) zero = {0.0, 0.0};
 @precision !
-    int      ldc;
+    int_t      ldc;
     char     trans_c[1];
 
     Astore = A->Store;
@@ -410,9 +410,9 @@ void
  * Fills a double precision array with a given value.
  */
 void 
-@(pre)fill(@(type) *a, int alen, @(type) dval)
+@(pre)fill(@(type) *a, int_t alen, @(type) dval)
 {
-    register int i;
+    register int_t i;
     for (i = 0; i < alen; i++) a[i] = dval;
 }
 
@@ -421,7 +421,7 @@ void
 /* 
  * Check the inf-norm of the error vector 
  */
-void @(pre)inf_norm_error(int nrhs, SuperMatrix *X, @(type) *xtrue)
+void @(pre)inf_norm_error(int_t nrhs, SuperMatrix *X, @(type) *xtrue)
 {
     DNformat *Xstore;
     @(mod_type) err, xnorm;
@@ -429,7 +429,7 @@ void @(pre)inf_norm_error(int nrhs, SuperMatrix *X, @(type) *xtrue)
 @precision SCOMPLEX DCOMPLEX
     @(type) temp;
 @precision !
-    int i, j;
+    int_t i, j;
 
     Xstore = X->Store;
     Xmat = Xstore->nzval;
@@ -515,9 +515,9 @@ void
 }
 
 
-int print_@(type)_vec(char *what, int n, int *ind, @(type) *vec)
+int_t print_@(type)_vec(char *what, int_t n, int_t *ind, @(type) *vec)
 {
-    int i;
+    int_t i;
     printf("%s: n %d\n", what, n);
 @precision DOUBLE SINGLE
     for (i = 0; i < n; ++i) printf("%d\t%f\n", ind[i], vec[i]);

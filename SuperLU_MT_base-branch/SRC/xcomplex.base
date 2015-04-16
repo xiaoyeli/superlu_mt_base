@@ -1,6 +1,6 @@
 @extract -b Typedef.inc
 /*
- * -- SuperLU routine (version 2.0) --
+ * -- SuperLU routine (version 3.0) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley,
  * and Xerox Palo Alto Research Center.
  * September 10, 2007
@@ -146,7 +146,7 @@ void @(pre)@(pre)_mult(@(type) *c, @(type) *a, @(type) *b)
 }
 
 /* Returns 1 if *a == *b */
-int @(pre)_eq(@(type) *a, @(type) *b)
+int_t @(pre)_eq(@(type) *a, @(type) *b)
 {
     return ( (a->r == b->r) &&  (a->i == b->i) );
 }

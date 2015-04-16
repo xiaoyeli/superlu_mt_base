@@ -1,6 +1,6 @@
 @extract -b Typedef.inc
 /*
- * -- SuperLU routine (version 2.0) --
+ * -- SuperLU routine (version 3.0) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley,
  * and Xerox Palo Alto Research Center.
  * September 10, 2007
@@ -13,11 +13,11 @@
 #include "slu_@(mod_pre)complex.h"
 @precision !
 
-int
+int_t
 @precision SINGLE DOUBLE
-@(pre)lacon_(int *n, @(type) *v, @(type) *x, int *isgn, @(type) *est, int *kase)
+@(pre)lacon_(int_t *n, @(type) *v, @(type) *x, int_t *isgn, @(type) *est, int_t *kase)
 @precision SCOMPLEX DCOMPLEX
-@(pre)lacon_(int *n, @(type) *v, @(type) *x, @(mod_type) *est, int *kase)
+@(pre)lacon_(int_t *n, @(type) *v, @(type) *x, @(mod_type) *est, int_t *kase)
 @precision !
 
 {
@@ -32,7 +32,7 @@ int
     Arguments   
     =========   
 
-    N      (input) INT
+    N      (input) INT_T
            The order of the matrix.  N >= 1.   
 
     V      (workspace) @(TYPE) PRECISION array, dimension (N)   
@@ -50,13 +50,13 @@ int
            unchanged.   
 
 @precision SINGLE DOUBLE
-    ISGN   (workspace) INT array, dimension (N)
+    ISGN   (workspace) INT_T array, dimension (N)
 @precision !
 
     EST    (output) @(MOD_TYPE) PRECISION   
            An estimate (a lower bound) for norm(A).   
 
-    KASE   (input/output) INT
+    KASE   (input/output) INT_T
            On the initial call to @(PRE)LACON, KASE should be 0.   
            On an intermediate return, KASE will be 1 or 2, indicating   
            whether X should be overwritten by A * X  or A' * X.   
@@ -88,10 +88,10 @@ int
 @precision !
     
     /* Local variables */
-    static int iter;
-    static int jump, jlast;
+    static int_t iter;
+    static int_t jump, jlast;
     static @(mod_type) altsgn, estold;
-    static int i, j;
+    static int_t i, j;
     @(mod_type) temp;
 @precision SCOMPLEX DCOMPLEX
     @(mod_type) safmin;

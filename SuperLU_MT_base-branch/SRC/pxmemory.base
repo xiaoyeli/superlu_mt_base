@@ -24,24 +24,24 @@
 /* -------------------
    Internal prototypes
    ------------------- */
-void    *p@(pre)gstrf_expand (int *, MemType,int, int, GlobalLU_t *);
-void    copy_mem_@(type) (int, void *, void *);
+void    *p@(pre)gstrf_expand (int_t *, MemType,int_t, int_t, GlobalLU_t *);
+void    copy_mem_@(type) (int_t, void *, void *);
 void    p@(pre)gstrf_StackCompress(GlobalLU_t *);
-void    p@(pre)gstrf_SetupSpace (void *, int);
-void    *@(pre)user_malloc   (int, int);
-void    @(pre)user_free      (int, int);
+void    p@(pre)gstrf_SetupSpace (void *, int_t);
+void    *@(pre)user_malloc   (int_t, int_t);
+void    @(pre)user_free      (int_t, int_t);
 
 /* ----------------------------------------------
    External prototypes (in memory.c - prec-indep)
    ---------------------------------------------- */
-extern void    copy_mem_int    (int, void *, void *);
-extern void    user_bcopy      (char *, char *, int);
+extern void    copy_mem_int    (int_t, void *, void *);
+extern void    user_bcopy      (char *, char *, int_t);
 
 typedef struct {
-    int  size;
-    int  used;
-    int  top1;  /* grow upward, relative to &array[0] */
-    int  top2;  /* grow downward */
+    int_t  size;
+    int_t  used;
+    int_t  top1;  /* grow upward, relative to &array[0] */
+    int_t  top2;  /* grow downward */
     void *array;
 #if ( MACH==PTHREAD )
     pthread_mutex_t lock;;
@@ -53,14 +53,14 @@ typedef enum {SYSTEM, USER} LU_space_t;
 
 ExpHeader *@(pre)expanders = 0; /* Array of pointers to 4 types of memory */
 static LU_stack_t stack;
-static int        no_expand;
-static int        ndim;
+static int_t        no_expand;
+static int_t        ndim;
 static LU_space_t whichspace; /* 0 - system malloc'd; 1 - user provided */
 
 /* Macros to manipulate stack */
 #define StackFull(x)         ( x + stack.used >= stack.size )
-#define NotDoubleAlign(addr) ( (long int)addr & 7 )
-#define DoubleAlign(addr)    ( ((long int)addr + 7) & ~7L )
+#define NotDoubleAlign(addr) ( (long long int)addr & 7 )
+#define DoubleAlign(addr)    ( ((long long int)addr + 7) & ~7L )
 
 #define Reduce(alpha)        ((alpha + 1) / 2)     /* i.e. (alpha-1)/2 + 1 */
 
@@ -72,7 +72,7 @@ static LU_space_t whichspace; /* 0 - system malloc'd; 1 - user provided */
  *    lwork = 0: use system malloc;
  *    lwork > 0: use user-supplied work[] space.
  */
-void p@(pre)gstrf_SetupSpace(void *work, int lwork)
+void p@(pre)gstrf_SetupSpace(void *work, int_t lwork)
 {
     if ( lwork == 0 ) {
         whichspace = SYSTEM; /* malloc/free */
@@ -100,7 +100,7 @@ void p@(pre)gstrf_StackFree()
 #endif
 } 
 
-void *@(pre)user_malloc(int bytes, int which_end)
+void *@(pre)user_malloc(int_t bytes, int_t which_end)
 {
     void *buf;
 
@@ -134,7 +134,7 @@ void *@(pre)user_malloc(int bytes, int which_end)
 }
 
 
-void @(pre)user_free(int bytes, int which_end)
+void @(pre)user_free(int_t bytes, int_t which_end)
 {
 
 #if ( MACH==PTHREAD ) /* Use pthread ... */
@@ -157,12 +157,11 @@ void @(pre)user_free(int bytes, int which_end)
 
 
 /* Returns the working storage used during factorization */
-int superlu_@(pre)TempSpace(int n, int w, int p)
+int_t superlu_@(pre)TempSpace(int_t n, int_t w, int_t p)
 {
     register float tmp, ptmp;
-    register int iword = sizeof(int), dword = sizeof(@(type));
-    int    maxsuper = sp_ienv(3),
-           rowblk   = sp_ienv(4);
+    register int_t iword = sizeof(int_t), dword = sizeof(@(type));
+    int_t    maxsuper = sp_ienv(3), rowblk = sp_ienv(4);
 
     /* globally shared */
     tmp = 14 * n * iword;
@@ -187,17 +186,17 @@ int superlu_@(pre)TempSpace(int n, int w, int p)
  *    o expansions (int)
  *      The number of memory expansions during the LU factorization.
  */
-int superlu_@(pre)QuerySpace(int P, SuperMatrix *L, SuperMatrix *U, int panel_size,
+int_t superlu_@(pre)QuerySpace(int_t P, SuperMatrix *L, SuperMatrix *U, int_t panel_size,
                        superlu_memusage_t *superlu_memusage)
 {
     SCPformat *Lstore;
     NCPformat *Ustore;
-    register int n, iword, dword, lwork;
+    register int_t n, iword, dword, lwork;
 
     Lstore = L->Store;
     Ustore = U->Store;
     n = L->ncol;
-    iword = sizeof(int);
+    iword = sizeof(int_t);
     dword = sizeof(@(type));
 
     /* L supernodes of type SCP */
@@ -218,11 +217,11 @@ int superlu_@(pre)QuerySpace(int P, SuperMatrix *L, SuperMatrix *U, int panel_si
     return 0;
 }
 
-float p@(pre)gstrf_memory_use(const int nzlmax, const int nzumax, const int nzlumax)
+float p@(pre)gstrf_memory_use(const int_t nzlmax, const int_t nzumax, const int_t nzlumax)
 {
     register float iword, dword, t;
 
-    iword   = sizeof(int);
+    iword   = sizeof(int_t);
     dword   = sizeof(@(type));
 
     t = 10. * ndim * iword + nzlmax * iword + nzumax * (iword + dword)
@@ -240,31 +239,31 @@ float p@(pre)gstrf_memory_use(const int nzlmax, const int nzumax, const int nzlu
  *     memory allocation failure occurred.
  */
 float
-p@(pre)gstrf_MemInit(int n, int annz, superlumt_options_t *superlumt_options,
+p@(pre)gstrf_MemInit(int_t n, int_t annz, superlumt_options_t *superlumt_options,
 		SuperMatrix *L, SuperMatrix *U, GlobalLU_t *Glu)
 {
-    register int nprocs = superlumt_options->nprocs;
+    register int_t nprocs = superlumt_options->nprocs;
     yes_no_t refact = superlumt_options->refact;
-    register int panel_size = superlumt_options->panel_size;
-    register int lwork = superlumt_options->lwork;
+    register int_t panel_size = superlumt_options->panel_size;
+    register int_t lwork = superlumt_options->lwork;
     void     *work = superlumt_options->work;
-    int      iword, dword, retries = 0;
+    int_t      iword, dword, retries = 0;
     SCPformat *Lstore;
     NCPformat *Ustore;
-    int      *xsup, *xsup_end, *supno;
-    int      *lsub, *xlsub, *xlsub_end;
+    int_t      *xsup, *xsup_end, *supno;
+    int_t      *lsub, *xlsub, *xlsub_end;
     @(type)   *lusup;
-    int      *xlusup, *xlusup_end;
+    int_t      *xlusup, *xlusup_end;
     @(type)   *ucol;
-    int      *usub, *xusub, *xusub_end;
-    int      nzlmax, nzumax, nzlumax;
-    int      FILL_LUSUP = sp_ienv(6); /* Guess the fill-in growth for LUSUP */
-    int      FILL_UCOL = sp_ienv(7); /* Guess the fill-in growth for UCOL */
-    int      FILL_LSUB = sp_ienv(8); /* Guess the fill-in growth for LSUB */
+    int_t      *usub, *xusub, *xusub_end;
+    int_t      nzlmax, nzumax, nzlumax;
+    int_t      FILL_LUSUP = sp_ienv(6); /* Guess the fill-in growth for LUSUP */
+    int_t      FILL_UCOL = sp_ienv(7); /* Guess the fill-in growth for UCOL */
+    int_t      FILL_LSUB = sp_ienv(8); /* Guess the fill-in growth for LSUB */
     
     no_expand = 0;
     ndim      = n;
-    iword     = sizeof(int);
+    iword     = sizeof(int_t);
     dword     = sizeof(@(type));
 
     if ( !@(pre)expanders )
@@ -305,21 +304,21 @@ p@(pre)gstrf_MemInit(int n, int annz, superlumt_options_t *superlumt_options,
 	    xusub      = intMalloc(n+1);
 	    xusub_end  = intMalloc(n);
 	} else {
-	    xsup       = (int *)@(pre)user_malloc((n+1) * iword, HEAD);
-	    xsup_end   = (int *)@(pre)user_malloc((n) * iword, HEAD);
-	    supno      = (int *)@(pre)user_malloc((n+1) * iword, HEAD);
-	    xlsub      = (int *)@(pre)user_malloc((n+1) * iword, HEAD);
-	    xlsub_end  = (int *)@(pre)user_malloc((n) * iword, HEAD);
-	    xlusup     = (int *)@(pre)user_malloc((n+1) * iword, HEAD);
-	    xlusup_end = (int *)@(pre)user_malloc((n) * iword, HEAD);
-	    xusub      = (int *)@(pre)user_malloc((n+1) * iword, HEAD);
-	    xusub_end  = (int *)@(pre)user_malloc((n) * iword, HEAD);
+	    xsup       = (int_t *)@(pre)user_malloc((n+1) * iword, HEAD);
+	    xsup_end   = (int_t *)@(pre)user_malloc((n) * iword, HEAD);
+	    supno      = (int_t *)@(pre)user_malloc((n+1) * iword, HEAD);
+	    xlsub      = (int_t *)@(pre)user_malloc((n+1) * iword, HEAD);
+	    xlsub_end  = (int_t *)@(pre)user_malloc((n) * iword, HEAD);
+	    xlusup     = (int_t *)@(pre)user_malloc((n+1) * iword, HEAD);
+	    xlusup_end = (int_t *)@(pre)user_malloc((n) * iword, HEAD);
+	    xusub      = (int_t *)@(pre)user_malloc((n+1) * iword, HEAD);
+	    xusub_end  = (int_t *)@(pre)user_malloc((n) * iword, HEAD);
 	}
 
 	lusup = (@(type) *) p@(pre)gstrf_expand( &nzlumax, LUSUP, 0, 0, Glu );
 	ucol  = (@(type) *) p@(pre)gstrf_expand( &nzumax, UCOL, 0, 0, Glu );
-	lsub  = (int *)    p@(pre)gstrf_expand( &nzlmax, LSUB, 0, 0, Glu );
-	usub  = (int *)    p@(pre)gstrf_expand( &nzumax, USUB, 0, 1, Glu );
+	lsub  = (int_t *)    p@(pre)gstrf_expand( &nzlmax, LSUB, 0, 0, Glu );
+	usub  = (int_t *)    p@(pre)gstrf_expand( &nzumax, USUB, 0, 1, Glu );
 
 	while ( !ucol || !lsub || !usub ) {
 	    /*SUPERLU_ABORT("Not enough core in LUMemInit()");*/
@@ -340,8 +339,8 @@ p@(pre)gstrf_MemInit(int n, int annz, superlumt_options_t *superlumt_options,
 		return (p@(pre)gstrf_memory_use(nzlmax, nzumax, nzlumax) + n);
 	    }
 	    ucol  = (@(type) *) p@(pre)gstrf_expand( &nzumax, UCOL, 0, 0, Glu );
-	    lsub  = (int *)    p@(pre)gstrf_expand( &nzlmax, LSUB, 0, 0, Glu );
-	    usub  = (int *)    p@(pre)gstrf_expand( &nzumax, USUB, 0, 1, Glu );
+	    lsub  = (int_t *)  p@(pre)gstrf_expand( &nzlmax, LSUB, 0, 0, Glu );
+	    usub  = (int_t *)  p@(pre)gstrf_expand( &nzumax, USUB, 0, 1, Glu );
 	}
 	
 	if ( !lusup )  {
@@ -424,22 +423,22 @@ p@(pre)gstrf_MemInit(int n, int annz, superlumt_options_t *superlumt_options,
  * Allocate known working storage. Returns 0 if success, otherwise
  * returns the number of bytes allocated so far when failure occurred.
  */
-int
-p@(pre)gstrf_WorkInit(int n, int panel_size, int **iworkptr, @(type) **dworkptr)
+int_t
+p@(pre)gstrf_WorkInit(int_t n, int_t panel_size, int_t **iworkptr, @(type) **dworkptr)
 {
     size_t  isize, dsize, extra;
     @(type) *old_ptr;
-    int    maxsuper = sp_ienv(3),
+    int_t    maxsuper = sp_ienv(3),
            rowblk   = sp_ienv(4);
 
-    isize = (2*panel_size + 5 + NO_MARKER) * n * sizeof(int);
+    isize = (2*panel_size + 5 + NO_MARKER) * n * sizeof(int_t);
     dsize = (n * panel_size +
 	     NUM_TEMPV(n,panel_size,maxsuper,rowblk)) * sizeof(@(type));
     
     if ( whichspace == SYSTEM ) 
-	*iworkptr = (int *) intCalloc(isize/sizeof(int));
+	*iworkptr = (int_t *) intCalloc(isize/sizeof(int_t));
     else
-	*iworkptr = (int *) @(pre)user_malloc(isize, TAIL);
+	*iworkptr = (int_t *) @(pre)user_malloc(isize, TAIL);
     if ( ! *iworkptr ) {
 	fprintf(stderr, "p@(pre)gstrf_WorkInit: malloc fails for local iworkptr[]\n");
 	return (isize + n);
@@ -484,7 +483,7 @@ p@(pre)gstrf_WorkInit(int n, int panel_size, int **iworkptr, @(type) **dworkptr)
  * Set up pointers for real working arrays.
  */
 void
-p@(pre)gstrf_SetRWork(int n, int panel_size, @(type) *dworkptr,
+p@(pre)gstrf_SetRWork(int_t n, int_t panel_size, @(type) *dworkptr,
 		 @(type) **dense, @(type) **tempv)
 {
 @precision SINGLE DOUBLE
@@ -493,8 +492,8 @@ p@(pre)gstrf_SetRWork(int n, int panel_size, @(type) *dworkptr,
     @(type) zero = {0.0, 0.0};
 @precision !
 
-    int maxsuper = sp_ienv(3);
-    int rowblk   = sp_ienv(4);
+    int_t maxsuper = sp_ienv(3);
+    int_t rowblk   = sp_ienv(4);
     *dense = dworkptr;
     *tempv = *dense + panel_size*n;
     @(pre)fill (*dense, n * panel_size, zero);
@@ -504,7 +503,7 @@ p@(pre)gstrf_SetRWork(int n, int panel_size, @(type) *dworkptr,
 /*
  * Free the working storage used by factor routines.
  */
-void p@(pre)gstrf_WorkFree(int *iwork, @(type) *dwork, GlobalLU_t *Glu)
+void p@(pre)gstrf_WorkFree(int_t *iwork, @(type) *dwork, GlobalLU_t *Glu)
 {
     if ( whichspace == SYSTEM ) {
 	SUPERLU_FREE (iwork);
@@ -536,12 +535,12 @@ void p@(pre)gstrf_WorkFree(int *iwork, @(type) *dwork, GlobalLU_t *Glu)
  * !! Warning: Not Implemented in SuperLU_MT !!
  * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
  */
-int
+int_t
 p@(pre)gstrf_MemXpand(
-		 int jcol,
-		 int next, /* number of elements currently in the factors */
+		 int_t jcol,
+		 int_t next, /* number of elements currently in the factors */
 		 MemType mem_type,/* which type of memory to expand  */
-		 int *maxlen, /* modified - max. length of a data structure */
+		 int_t *maxlen, /* modified - max. length of a data structure */
 		 GlobalLU_t *Glu /* modified - global LU data structures */
 		 )
 {
@@ -558,9 +557,9 @@ p@(pre)gstrf_MemXpand(
 	new_mem = p@(pre)gstrf_expand(maxlen, mem_type, next, 0, Glu);
     
     if ( !new_mem ) {
-	int    nzlmax  = Glu->nzlmax;
-	int    nzumax  = Glu->nzumax;
-	int    nzlumax = Glu->nzlumax;
+	int_t    nzlmax  = Glu->nzlmax;
+	int_t    nzumax  = Glu->nzumax;
+	int_t    nzlumax = Glu->nzlumax;
     	fprintf(stderr, "Can't expand MemType %d: jcol %d\n", mem_type, jcol);
     	return (p@(pre)gstrf_memory_use(nzlmax, nzumax, nzlumax) + ndim);
     }
@@ -575,11 +574,11 @@ p@(pre)gstrf_MemXpand(
 	Glu->nzumax = *maxlen;
 	break;
       case LSUB:
-	Glu->lsub   = (int *) new_mem;
+	Glu->lsub   = (int_t *) new_mem;
 	Glu->nzlmax = *maxlen;
 	break;
       case USUB:
-	Glu->usub   = (int *) new_mem;
+	Glu->usub   = (int_t *) new_mem;
 	Glu->nzumax = *maxlen;
 	break;
     }
@@ -590,9 +589,9 @@ p@(pre)gstrf_MemXpand(
 
 
 void
-copy_mem_@(type)(int howmany, void *old, void *new)
+copy_mem_@(type)(int_t howmany, void *old, void *new)
 {
-    register int i;
+    register int_t i;
     @(type) *dold = old;
     @(type) *dnew = new;
     for (i = 0; i < howmany; i++) dnew[i] = dold[i];
@@ -604,17 +603,17 @@ copy_mem_@(type)(int howmany, void *old, void *new)
  */
 void
 *p@(pre)gstrf_expand(
-                int *prev_len,   /* length used from previous call */
+                int_t *prev_len,   /* length used from previous call */
                 MemType type,    /* which part of the memory to expand */
-                int len_to_copy, /* size of memory to be copied to new store */
-                int keep_prev,   /* = 1: use prev_len;
+                int_t len_to_copy, /* size of memory to be copied to new store */
+                int_t keep_prev,   /* = 1: use prev_len;
                                     = 0: compute new_len to expand */
                 GlobalLU_t *Glu  /* modified - global LU data structures */
                 )
 {
     double   alpha = EXPAND;
     void     *new_mem, *old_mem;
-    int      new_len, tries, lword, extra, bytes_to_copy;
+    int_t      new_len, tries, lword, extra, bytes_to_copy;
     void     *ret = NULL;
 
     if ( no_expand == 0 || keep_prev ) /* First time allocate requested */
@@ -623,7 +622,7 @@ void
         new_len = alpha * *prev_len;
     }
 
-    if ( type == LSUB || type == USUB ) lword = sizeof(int);
+    if ( type == LSUB || type == USUB ) lword = sizeof(int_t);
     else lword = sizeof(@(type));
 
     if ( whichspace == SYSTEM ) {
@@ -745,14 +744,14 @@ void
 void
 p@(pre)gstrf_StackCompress(GlobalLU_t *Glu)
 {
-    register int iword, dword;
+    register int_t iword, dword;
     char     *last, *fragment;
-    int      *ifrom, *ito;
+    int_t      *ifrom, *ito;
     @(type)   *dfrom, *dto;
-    int      *xlsub, *lsub, *xusub_end, *usub, *xlusup;
+    int_t      *xlsub, *lsub, *xusub_end, *usub, *xlusup;
     @(type)   *ucol, *lusup;
     
-    iword = sizeof(int);
+    iword = sizeof(int_t);
     dword = sizeof(@(type));
 
     xlsub  = Glu->xlsub;
@@ -769,19 +768,19 @@ p@(pre)gstrf_StackCompress(GlobalLU_t *Glu)
     ucol = dto;
 
     ifrom = lsub;
-    ito = (int *) ((char*)ucol + xusub_end[ndim-1] * iword);
+    ito = (int_t *) ((char*)ucol + xusub_end[ndim-1] * iword);
     copy_mem_int(xlsub[ndim], ifrom, ito);
     lsub = ito;
     
     ifrom = usub;
-    ito = (int *) ((char*)lsub + xlsub[ndim] * iword);
+    ito = (int_t *) ((char*)lsub + xlsub[ndim] * iword);
     copy_mem_int(xusub_end[ndim-1], ifrom, ito);
     usub = ito;
     
     last = (char*)usub + xusub_end[ndim-1] * iword;
     fragment = (char*) ((char*)stack.array + stack.top1 - last);
-    stack.used -= (long int) fragment;
-    stack.top1 -= (long int) fragment;
+    stack.used -= (long long int) fragment;
+    stack.top1 -= (long long int) fragment;
 
     Glu->ucol = ucol;
     Glu->lsub = lsub;
@@ -801,14 +800,14 @@ p@(pre)gstrf_StackCompress(GlobalLU_t *Glu)
  * Allocate storage for original matrix A
  */
 void
-@(pre)allocateA(int n, int nnz, @(type) **a, int **asub, int **xa)
+@(pre)allocateA(int_t n, int_t nnz, @(type) **a, int_t **asub, int_t **xa)
 {
     *a    = (@(type) *) @(type)Malloc(nnz);
-    *asub = (int *) intMalloc(nnz);
-    *xa   = (int *) intMalloc(n+1);
+    *asub = (int_t *) intMalloc(nnz);
+    *xa   = (int_t *) intMalloc(n+1);
 }
 
-@(type) *@(type)Malloc(int n)
+@(type) *@(type)Malloc(int_t n)
 {
     @(type) *buf;
     buf = (@(type) *) SUPERLU_MALLOC( (size_t) n * sizeof(@(type)) ); 
@@ -819,10 +818,10 @@ void
     return (buf);
 }
 
-@(type) *@(type)Calloc(int n)
+@(type) *@(type)Calloc(int_t n)
 {
     @(type) *buf;
-    register int i;
+    register int_t i;
 @precision SINGLE DOUBLE
     @(type) zero = 0.0;
 @precision SCOMPLEX DCOMPLEX
@@ -851,22 +850,22 @@ void
  *   o Static scheme: number of nonzeros of all the supernodes in H.
  *   o Dynamic scheme: number of nonzeros of the relaxed supernodes. 
  */
-int
+int_t
 @(pre)PresetMap(
-	  const int n,
+	  const int_t n,
 	  SuperMatrix *A, /* original matrix permuted by columns */
 	  pxgstrf_relax_t *pxgstrf_relax, /* relaxed supernodes */
 	  superlumt_options_t *superlumt_options, /* input */
 	  GlobalLU_t *Glu /* modified */
 	  )
 {
-    register int i, j, k, w, rs, rs_lastcol, krow, kmark, maxsup, nextpos;
-    register int rs_nrow; /* number of nonzero rows in a relaxed supernode */
-    int          *marker, *asub, *xa_begin, *xa_end;
+    register int_t i, j, k, w, rs, rs_lastcol, krow, kmark, maxsup, nextpos;
+    register int_t rs_nrow; /* number of nonzero rows in a relaxed supernode */
+    int_t          *marker, *asub, *xa_begin, *xa_end;
     NCPformat    *Astore;
-    int *map_in_sup; /* memory mapping function; values irrelevant on entry. */
-    int *colcnt;     /* column count of Lc or H */
-    int *super_bnd;  /* supernodes partition in H */
+    int_t *map_in_sup; /* memory mapping function; values irrelevant on entry. */
+    int_t *colcnt;     /* column count of Lc or H */
+    int_t *super_bnd;  /* supernodes partition in H */
     char *snode_env, *getenv();
 
     snode_env = getenv("SuperLU_DYNAMIC_SNODE_STORE");

@@ -8,6 +8,7 @@
  */
 #include <math.h>
 #include "slu_mt_Cnames.h"
+#include "p@(pre)sp_defs.h"
 #include "slu_mt_util.h"
 @precision SCOMPLEX DCOMPLEX
 #include "slu_@(mod_pre)complex.h"
@@ -76,6 +77,7 @@ int_t
 
     /* Table of constant values */
     int c__1 = 1;
+    int ni = *n;
 @precision SINGLE DOUBLE
     @(type)      zero = 0.0;
     @(type)      one = 1.0;
@@ -150,9 +152,9 @@ int_t
 	goto L150;
     }
 @precision SINGLE DOUBLE
-    *est = @(pre)asum_(n, x, &c__1);
+    *est = @(pre)asum_(&ni, x, &c__1);
 @precision SCOMPLEX DCOMPLEX
-    *est = @(mod_pre)@(pre)sum1_(n, x, &c__1);
+    *est = @(mod_pre)@(pre)sum1_(&ni, x, &c__1);
 @precision !
 
     for (i = 0; i < *n; ++i) {
@@ -178,9 +180,9 @@ int_t
 	   FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L40:
 @precision SINGLE DOUBLE
-    j = i@(pre)amax_(n, &x[0], &c__1);
+    j = i@(pre)amax_(&ni, &x[0], &c__1);
 @precision SCOMPLEX DCOMPLEX
-    j = i@(pre)max1_(n, &x[0], &c__1);
+    j = i@(pre)max1_(&ni, &x[0], &c__1);
 @precision !
     --j;
     iter = 2;
@@ -196,12 +198,12 @@ L50:
     /*     ................ ENTRY   (JUMP = 3)   
 	   X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
-    @(pre)copy_(n, &x[0], &c__1, &v[0], &c__1);
+    @(pre)copy_(&ni, &x[0], &c__1, &v[0], &c__1);
     estold = *est;
 @precision SINGLE DOUBLE
-    *est = @(pre)asum_(n, v, &c__1);
+    *est = @(pre)asum_(&ni, v, &c__1);
 @precision SCOMPLEX DCOMPLEX
-    *est = @(mod_pre)@(pre)sum1_(n, v, &c__1);
+    *est = @(mod_pre)@(pre)sum1_(&ni, v, &c__1);
 @precision !
 
 @precision SINGLE DOUBLE
@@ -241,9 +243,9 @@ L90:
 L110:
     jlast = j;
 @precision SINGLE DOUBLE
-    j = i@(pre)amax_(n, &x[0], &c__1);
+    j = i@(pre)amax_(&ni, &x[0], &c__1);
 @precision SCOMPLEX DCOMPLEX
-    j = i@(pre)max1_(n, &x[0], &c__1);
+    j = i@(pre)max1_(&ni, &x[0], &c__1);
 @precision !
     --j;
 @precision SINGLE DOUBLE
@@ -275,12 +277,12 @@ L120:
 	   X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
 @precision SINGLE DOUBLE
-    temp = @(pre)asum_(n, x, &c__1) / (@(mod_type)) (*n * 3) * 2.;
+    temp = @(pre)asum_(&ni, x, &c__1) / (@(mod_type)) (*n * 3) * 2.;
 @precision SCOMPLEX DCOMPLEX
-    temp = @(mod_pre)@(pre)sum1_(n, x, &c__1) / (@(mod_type)) (*n * 3) * 2.;
+    temp = @(mod_pre)@(pre)sum1_(&ni, x, &c__1) / (@(mod_type)) (*n * 3) * 2.;
 @precision !
     if (temp > *est) {
-	@(pre)copy_(n, &x[0], &c__1, &v[0], &c__1);
+	@(pre)copy_(&ni, &x[0], &c__1, &v[0], &c__1);
 	*est = temp;
     }
 

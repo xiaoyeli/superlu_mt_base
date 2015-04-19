@@ -75,7 +75,8 @@ void
     /* Local variables */
     NCformat *Astore;
     @(type)   *Aval;
-    int_t i, j, irow;
+    int_t j, irow;
+    int   i;
     @(mod_type) rcmin, rcmax;
     @(mod_type) bignum, smlnum;
 @precision DOUBLE DCOMPLEX

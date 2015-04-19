@@ -65,8 +65,8 @@ p@(pre)gstrf_bmod2D_mv2(
 
     @(type)       ukj, ukj1, ukj2;
     int_t          luptr, luptr1, luptr2;
-    int_t          segsze;
-    int_t          block_nrow;  /* no of rows in a block row */
+    int          segsze, nsupr32 = nsupr;
+    int          block_nrow;  /* no of rows in a block row */
     register int_t lptr; /* points to the row subscripts of a supernode */
     int_t          kfnz, irow, no_zeros; 
     register int_t isub, isub1, i, j;
@@ -263,13 +263,12 @@ p@(pre)gstrf_bmod2D_mv2(
 #ifdef USE_VENDOR_BLAS
 #if ( MACH==CRAY_PVP )
 	    @(SC_PRE)TRSV( ftcs1, ftcs2, ftcs3, &segsze, &lusup[luptr], 
-		   &nsupr, TriTmp, &incx );
+		   &nsupr32, TriTmp, &incx );
 #else
-	    @(pre)trsv_( "L", "N", "U", &segsze, &lusup[luptr], 
-		   &nsupr, TriTmp, &incx );
+	    @(pre)trsv_( "L", "N", "U", &segsze, &lusup[luptr], &nsupr32, TriTmp, &incx );
 #endif
 #else		
-	    @(pre)lsolve ( nsupr, segsze, &lusup[luptr], TriTmp );
+	    @(pre)lsolve ( (int_t) nsupr, (int_t) segsze, &lusup[luptr], TriTmp );
 #endif		
 #ifdef TIMING	    
 	    utime[FLOAT] += SuperLU_timer_() - f_time;
@@ -318,13 +317,13 @@ p@(pre)gstrf_bmod2D_mv2(
 #ifdef USE_VENDOR_BLAS
 #if ( MACH==CRAY_PVP )
 		    @(SC_PRE)GEMV( ftcs2, &block_nrow, &segsze, &alpha, &lusup[luptr], 
-			   &nsupr, tri[0], &incx, &beta, matvec[0], &incy );
+			   &nsupr32, tri[0], &incx, &beta, matvec[0], &incy );
 #else
 		    @(pre)gemv_( "N", &block_nrow, &segsze, &alpha, &lusup[luptr], 
-			   &nsupr, tri[0], &incx, &beta, matvec[0], &incy );
+			   &nsupr32, tri[0], &incx, &beta, matvec[0], &incy );
 #endif
 #else
-		    @(pre)matvec (nsupr, block_nrow, segsze, &lusup[luptr],
+		    @(pre)matvec ((int_t) nsupr, (int_t) block_nrow, (int_t) segsze, &lusup[luptr],
 			     tri[0], matvec[0]);
 #endif
 		} else if ( kfnz2[0] > kfnz2[1] ) {

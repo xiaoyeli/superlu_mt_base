@@ -122,7 +122,7 @@ int_t @(pre)Print_CompCol_Matrix(SuperMatrix *A)
     printf("Stype %d, Dtype %d, Mtype %d\n", A->Stype,A->Dtype,A->Mtype);
     Astore = (NCformat *) A->Store;
     dp = (@(type) *) Astore->nzval;
-    printf("nrow %d, ncol %d, nnz %d\n", A->nrow,A->ncol,Astore->nnz);
+    printf("nrow " IFMT ", ncol " IFMT ", nnz " IFMT "\n", A->nrow,A->ncol,Astore->nnz);
     printf("\nnzval: ");
 @precision DOUBLE SINGLE
     for (i = 0; i < Astore->nnz; ++i) printf("%f  ", dp[i]);
@@ -131,9 +131,9 @@ int_t @(pre)Print_CompCol_Matrix(SuperMatrix *A)
           dp[i].r, dp[i].i);
 @precision !
     printf("\nrowind: ");
-    for (i = 0; i < Astore->nnz; ++i) printf("%d  ", Astore->rowind[i]);
+    for (i = 0; i < Astore->nnz; ++i) printf(IFMT, Astore->rowind[i]);
     printf("\ncolptr: ");
-    for (i = 0; i <= A->ncol; ++i) printf("%d  ", Astore->colptr[i]);
+    for (i = 0; i <= A->ncol; ++i) printf(IFMT, Astore->colptr[i]);
     printf("\nend CompCol matrix.\n");
 
     return 0;
@@ -147,13 +147,13 @@ int_t @(pre)Print_CCS_to_triplets(SuperMatrix *A)
     
     Astore = (NCformat *) A->Store;
     dp = (@(type) *) Astore->nzval;
-    printf("%d\t%d\t%d\n", A->nrow,A->ncol,Astore->nnz);
+    printf(IFMT IFMT IFMT, A->nrow,A->ncol,Astore->nnz);
     for (j = 0; j < A->ncol; ++j) {
 	for (i = Astore->colptr[j]; i < Astore->colptr[j+1]; ++i) {
 @precision DOUBLE SINGLE
-	    printf("%8d%8d%20.16e\n", Astore->rowind[i], j, dp[i]);
+	    printf(IFMT IFMT "%20.16e\n", Astore->rowind[i], j, dp[i]);
 @precision DCOMPLEX SCOMPLEX
-	    printf("%8d%8d%20.16e %20.16e\n", Astore->rowind[i], j,
+	    printf(IFMT IFMT "%20.16e %20.16e\n", Astore->rowind[i], j,
 	             dp[i].r, dp[i].i);
 @precision !
 	}
@@ -168,10 +168,11 @@ int_t @(pre)Print_Dense_Matrix(SuperMatrix *A)
     @(mod_type)       *dp;
     
     printf("\nDense matrix: ");
-    printf("Stype %d, Dtype %d, Mtype %d\n", A->Stype,A->Dtype,A->Mtype);
+    printf("Stype %d , Dtype %d , Mtype %d\n", A->Stype,A->Dtype,A->Mtype);
     Astore = (DNformat *) A->Store;
     dp = (@(mod_type) *) Astore->nzval;
-    printf("nrow %d, ncol %d, lda %d\n", A->nrow,A->ncol,Astore->lda);
+    printf("nrow " IFMT ", ncol " IFMT ", lda " IFMT "\n",
+           A->nrow,A->ncol,Astore->lda);
     printf("\nnzval: ");
 @precision DOUBLE SINGLE
     for (i = 0; i < A->nrow; ++i) printf("%f  ", dp[i]);
@@ -298,23 +299,29 @@ void
     xlusup  = Glu->xlusup;
     xlusup_end = Glu->xlusup_end;
     
-    printf("(%d)%s fstcol %d,col %d,w %d: pivrow %d, supno %d, xprune %d\n", 
+    printf("("IFMT") %s fstcol " IFMT ",col " IFMT ",w " IFMT ": pivrow " IFMT ", supno " IFMT ", xprune " IFMT "\n", 
 	   pnum, msg, pcol, jcol, w, pivrow, supno[jcol], xprune[jcol]);
     
-    printf("(%d)\tU-col: xusub %d - %d\n",
+    printf("(" IFMT ")\tU-col: xusub " IFMT " - " IFMT "\n",
 	   pnum, Glu->xusub[jcol], Glu->xusub_end[jcol]);
     for (i = Glu->xusub[jcol]; i < Glu->xusub_end[jcol]; i++)
 @precision DOUBLE SINGLE
-	printf("(%d)\t%d\t%8e\n", pnum, Glu->usub[i], Glu->ucol[i]);
+	printf("(" IFMT ")\t" IFMT "\t%8e\n", pnum, Glu->usub[i], Glu->ucol[i]);
 @precision DCOMPLEX SCOMPLEX
-	printf("(%d)\t%d\t%8e\n", pnum, Glu->usub[i], Glu->ucol[i]);
+	printf("(" IFMT ")\t" IFMT "\t%8e\t%8e\n", pnum, Glu->usub[i],
+	 Glu->ucol[i].r, Glu->ucol[i].i);
 @precision !    
     fsupc = xsup[supno[jcol]];
     k = xlusup[jcol];
-    printf("(%d)\tL-col in s-node: xlsub %d - %d, xlusup %d - %d\n",
+    printf("(" IFMT ")\tL-col in s-node: xlsub " IFMT " - " IFMT ", xlusup " IFMT "-" IFMT "\n",
 	   pnum, xlsub[fsupc],xlsub_end[fsupc],xlusup[jcol],xlusup_end[jcol]);
     for (i = xlsub[fsupc]; i < xlsub_end[fsupc]; ++i)
-	printf("(%d)\t%d\t%.8e\n", pnum, lsub[i], lusup[k++]);
+@precision DOUBLE SINGLE
+	printf("("  IFMT ")\t" IFMT "\t%.8e\n", pnum, lsub[i], lusup[k++]);
+@precision DCOMPLEX SCOMPLEX
+	printf("(" IFMT ")\t" IFMT "\t%.8e\t%.8e\n", pnum, lsub[i], 
+	lusup[k++].r, lusup[k++].i);
+@precision !
 
     fflush(stdout);
 }
@@ -335,21 +342,21 @@ void
     for (i = 0; i < n; ++i) {
 @precision DOUBLE SINGLE
         if (vec[i] != 0.0) {
-            printf("(%d) vec[%d] = %.10e; should be zero!\n",
+            printf("(" IFMT ") vec[" IFMT "] = %.10e; should be zero!\n",
                    pnum, i, vec[i]);
             nonzero = TRUE;
         }
 @precision DCOMPLEX SCOMPLEX
         if ((vec[i].r != 0.0) || (vec[i].i != 0.0))
         {
-            printf("(%d) vec[%d] = %.10e; should be zero!\n",
-                   pnum, i, vec[i]);
+            printf("(" IFMT ") vec[" IFMT "] = %.10e\t%.10e; should be zero!\n",
+                   pnum, i, vec[i].r, vec[i].i);
             nonzero = TRUE;
         }
 @precision !
     }
     if ( nonzero ) {
-	printf("(%d) %s\n", pnum, msg);
+	printf("(" IFMT ") %s\n", pnum, msg);
 	SUPERLU_ABORT("Not a zero vector.");
     } else {
         printf(".. Normal exit @(pre)check_zero_vec() ..\n");
@@ -478,11 +485,11 @@ void
     
     Lstore = (SCPformat *) L->Store;
     Ustore = (NCPformat *) U->Store;
-    printf("\t#NZ in factor L = %d\n", Lstore->nnz);
-    printf("\t#NZ in factor U = %d\n", Ustore->nnz);
-    printf("\t#NZ in L+U = %d\n", Lstore->nnz + Ustore->nnz - L->ncol);
+    printf("\t#NZ in factor L = " IFMT "\n", Lstore->nnz);
+    printf("\t#NZ in factor U = " IFMT "\n", Ustore->nnz);
+    printf("\t#NZ in L+U = " IFMT "\n", Lstore->nnz + Ustore->nnz - L->ncol);
 	
-    printf("L\\U MB %.3f\ttotal MB needed %.3f\texpansions %d\n",
+    printf("L\\U MB %.3f\ttotal MB needed %.3f\texpansions " IFMT "\n",
 	   superlu_memusage->for_lu/1e6, superlu_memusage->total_needed/1e6,
 	   superlu_memusage->expansions);
 	
@@ -499,13 +506,13 @@ void
 #if 0
 
     printf("\tTRSV (total%%)\tGEMV (total%%)\tfloat_time%%\tmax_n\tmax_m\tmin_n\tmin_m\tavg_n\tavg_m\n");
-    printf("BLAS:\t%.0f  %.2f\t%.0f  %.2f\t%.2f\t\t%d\t%d\t%d\t%d\t%.0f\t%.0f\n",
+    printf("BLAS:\t%.0f  %.2f\t%.0f  %.2f\t%.2f\t\t" IFMT "\t" IFMT "\t" IFMT "\t" IFMT "\t%.0f\t%.0f\n",
 	   ops[TRSV], ops[TRSV]/ops[FACT], ops[GEMV], ops[GEMV]/ops[FACT],
 	   utime[FLOAT]/utime[FACT],
 	   max_blas_n, max_gemv_m, min_blas_n, min_gemv_m,
 	   (float)sum_blas_n/num_blas, (float)sum_gemv_m/num_blas);
     printf("\tRCOND\tREFINE\tFERR\n");
-    printf("SOLVES:\t%d\t%d\t%d\n", no_solves[RCOND],
+    printf("SOLVES:\t" IFMT "\t" IFMT "\t" IFMT "\n", no_solves[RCOND],
 	   no_solves[REFINE], no_solves[FERR]);
     
     flops_dist_for_matlab();
@@ -518,11 +525,11 @@ void
 int_t print_@(type)_vec(char *what, int_t n, int_t *ind, @(type) *vec)
 {
     int_t i;
-    printf("%s: n %d\n", what, n);
+    printf("%s: n " IFMT "\n", what, n);
 @precision DOUBLE SINGLE
-    for (i = 0; i < n; ++i) printf("%d\t%f\n", ind[i], vec[i]);
+    for (i = 0; i < n; ++i) printf(IFMT "\t%f\n", ind[i], vec[i]);
 @precision DCOMPLEX SCOMPLEX
-    for (i = 0; i < n; ++i) printf("%d\t%f%f\n", ind[i], vec[i].r, vec[i].i);
+    for (i = 0; i < n; ++i) printf(IFMT "\t%f%f\n", ind[i], vec[i].r, vec[i].i);
 @precision !
     return 0;
 }

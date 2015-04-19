@@ -54,7 +54,7 @@ p@(pre)gstrf_bmod1D(
 
     @(type)       ukj, ukj1, ukj2;
     int_t          luptr, luptr1, luptr2;
-    int_t          segsze;
+    int            segsze, nrow32 = nrow, nsupr32 = nsupr;
     register int_t lptr; /* start of row subscripts of the updating supernode */
     register int_t i, krep_ind, kfnz, isub, irow, no_zeros;
     register int_t jj;	      /* index through each column in the panel */
@@ -276,8 +276,8 @@ if (krep == BADCOL && jj == -1) {
 	    @(SC_PRE)GEMV( ftcs2, &nrow, &segsze, &alpha, &lusup[luptr], 
 		  &nsupr, tempv, &incx, &beta, tempv1, &incy );
 #else
-	    @(pre)gemv_( "N", &nrow, &segsze, &alpha, &lusup[luptr], 
-		   &nsupr, tempv, &incx, &beta, tempv1, &incy );
+	    @(pre)gemv_( "N", &nrow32, &segsze, &alpha, &lusup[luptr], 
+		   &nsupr32, tempv, &incx, &beta, tempv1, &incy );
 #endif /* _CRAY_PVP */
 #else
 	    @(pre)lsolve ( nsupr, segsze, &lusup[luptr], tempv );

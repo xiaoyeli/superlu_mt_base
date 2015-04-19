@@ -66,7 +66,7 @@ p@(pre)gstrf_bmod1D_mv2(
 
     @(type)       ukj, ukj1, ukj2;
     int_t          luptr, luptr1, luptr2;
-    int_t          segsze;
+    int		   segsze, nrow32 = nrow;
     register int_t lptr; /* start of row subscripts of the updating supernode */
     register int_t i, j, kfnz, krep_ind, isub, irow, no_zeros, twocols;
     register int_t jj;	       /* index through each column in the panel */
@@ -297,14 +297,14 @@ if (krep == BADCOL && jj == -1) {
 		    luptr = xlusup[fsupc] + nsupr * no_zeros + nsupc;
 #ifdef USE_VENDOR_BLAS		    
 #if ( MACH==CRAY_PVP )
-		    @(SC_PRE)GEMV( ftcs2, &nrow, &segsze, &alpha, &lusup[luptr], 
+		    @(SC_PRE)GEMV( ftcs2, &nrow32, &segsze, &alpha, &lusup[luptr], 
 			   &nsupr, tri[0], &incx, &beta, matvec[0], &incy );
 #else
-		    @(pre)gemv_( "N", &nrow, &segsze, &alpha, &lusup[luptr], 
+		    @(pre)gemv_( "N", &nrow32, &segsze, &alpha, &lusup[luptr], 
 			   &nsupr, tri[0], &incx, &beta, matvec[0], &incy );
 #endif
 #else
-		    @(pre)matvec (nsupr, nrow, segsze, &lusup[luptr],
+		    @(pre)matvec (nsupr, nrow32, segsze, &lusup[luptr],
 			     tri[0], matvec[0]);
 #endif
 		    
@@ -314,14 +314,14 @@ if (krep == BADCOL && jj == -1) {
 		    luptr = xlusup[fsupc] + nsupr * no_zeros + nsupc;
 #ifdef USE_VENDOR_BLAS		    
 #if ( MACH==CRAY_PVP )
-		    @(SC_PRE)GEMV( ftcs2, &nrow, &segsze, &alpha, &lusup[luptr], 
+		    @(SC_PRE)GEMV( ftcs2, &nrow32, &segsze, &alpha, &lusup[luptr], 
 			   &nsupr, tri[1], &incx, &beta, matvec[1], &incy );
 #else
-		    @(pre)gemv_( "N", &nrow, &segsze, &alpha, &lusup[luptr], 
+		    @(pre)gemv_( "N", &nrow32, &segsze, &alpha, &lusup[luptr], 
 			   &nsupr, tri[1], &incx, &beta, matvec[1], &incy );
 #endif
 #else
-		    @(pre)matvec (nsupr, nrow, segsze, &lusup[luptr],
+		    @(pre)matvec (nsupr, nrow32, segsze, &lusup[luptr],
 			     tri[1], matvec[1]);
 #endif
 		}
@@ -340,7 +340,7 @@ if (krep == BADCOL && jj == -1) {
 		       &tri[0][kfnz-kfnz2[0]], &tri[1][kfnz-kfnz2[1]],
 		       matvec[0], matvec[1]);*/
 #else
-		@(pre)matvec2(nsupr, nrow, segsze, &lusup[luptr],
+		@(pre)matvec2(nsupr, nrow, (int_t) segsze, &lusup[luptr],
 			 &tri[0][kfnz-kfnz2[0]], &tri[1][kfnz-kfnz2[1]],
 			 matvec[0], matvec[1]);
 #endif

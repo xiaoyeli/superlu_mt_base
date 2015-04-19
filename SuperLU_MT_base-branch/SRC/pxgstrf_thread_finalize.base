@@ -4,7 +4,7 @@
 void
 p@(pre)gstrf_thread_finalize(p@(pre)gstrf_threadarg_t *p@(pre)gstrf_threadarg, 
 			pxgstrf_shared_t *pxgstrf_shared,
-			SuperMatrix *A, int *perm_r,
+			SuperMatrix *A, int_t *perm_r,
 			SuperMatrix *L, SuperMatrix *U
 			)
 {
@@ -112,7 +112,6 @@ p@(pre)gstrf_thread_finalize(p@(pre)gstrf_threadarg_t *p@(pre)gstrf_threadarg,
 
     /* Deallocate the storage used by the parallel scheduling algorithm. */
     ParallelFinalize(pxgstrf_shared);
-    StackFinalize();
     SUPERLU_FREE(p@(pre)gstrf_threadarg);
     SUPERLU_FREE(pxgstrf_shared->inv_perm_r);
     SUPERLU_FREE(pxgstrf_shared->inv_perm_c);

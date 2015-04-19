@@ -169,7 +169,8 @@ p@(pre)gstrf(superlumt_options_t *superlumt_options, SuperMatrix *A, int_t *perm
     
     for (i = 1; i < nprocs; ++i) {
 #if ( PRNTlevel==1 )
-	printf(".. Create unbound threads: i %d, nprocs %d\n", i, nprocs);
+	printf(".. Create unbound threads: i " IFMT ", nprocs " IFMT "\n",
+               i, nprocs);
 #endif
 	if ( (iinfo = thr_create(NULL, 0,
 			       p@(pre)gstrf_thread, &(p@(pre)gstrf_threadarg[i]),
@@ -223,7 +224,7 @@ p@(pre)gstrf(superlumt_options_t *superlumt_options, SuperMatrix *A, int_t *perm
     if ( getenv("MP_SET_NUMTHREADS") ) {
         i = atoi(getenv("MP_SET_NUMTHREADS"));
 	if ( nprocs > i ) {
-	    printf("nprocs=%d > environment allowed: MP_SET_NUMTHREADS=%d\n",
+	    printf("nprocs=" IFMT "> environment allowed: MP_SET_NUMTHREADS=" IFMT "\n",
 		   nprocs, i);
 	    exit(-1);
 	}
@@ -245,7 +246,7 @@ p@(pre)gstrf(superlumt_options_t *superlumt_options, SuperMatrix *A, int_t *perm
     if ( getenv("NCPUS") ) {
         i = atoi(getenv("NCPUS"));
 	if ( nprocs > i ) {
-	    printf("nprocs=%d > environment allowed: NCPUS=%d\n",
+	    printf("nprocs=" IFMT "> environment allowed: NCPUS=" IFMT "\n",
 		   nprocs, i);
 	    exit(-1);
 	}
@@ -270,7 +271,7 @@ p@(pre)gstrf(superlumt_options_t *superlumt_options, SuperMatrix *A, int_t *perm
 				    NULL,
 				    p@(pre)gstrf_thread, 
 				    &(p@(pre)gstrf_threadarg[i])) ) {
-	    fprintf(stderr, "pthread_create: %d\n", iinfo);
+	    fprintf(stderr, "pthread_create: " IFMT "\n", iinfo);
 	    SUPERLU_ABORT("pthread_create()");
 	}
     }
@@ -310,7 +311,7 @@ p@(pre)gstrf(superlumt_options_t *superlumt_options, SuperMatrix *A, int_t *perm
     utime[FACT] = wtime;
 
 #if ( PRNTlevel==1 )
-    printf(".. p@(pre)gstrf_thread() returns info %d, usrtime %.2f, wtime %.2f\n",
+    printf(".. p@(pre)gstrf_thread() returns info " IFMT ", usrtime %.2f, wtime %.2f\n",
            *info, usrtime, wtime);
 #endif
 

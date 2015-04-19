@@ -5,6 +5,13 @@
  * and Xerox Palo Alto Research Center.
  * September 10, 2007
  *
+ * Purpose:
+ * ========
+ * This example illustrates how to use the symmetric mode by setting:
+ *    permc_spec = 2;
+ *    superlumt_options.SymmetricMode = YES;
+ *    superlumt_options.diag_pivot_thresh = 0.0;
+ * 
  */
 #include "p@(pre)sp_defs.h"
 
@@ -121,8 +128,11 @@ main(int argc, char *argv[])
      *   permc_spec = 2: minimum degree ordering on structure of A'+A
      *   permc_spec = 3: approximate minimum degree for unsymmetric matrices
      */    	
-    permc_spec = 1;
+    permc_spec = 2;
     get_perm_c(permc_spec, &A, perm_c);
+
+    superlumt_options.SymmetricMode = YES;
+    superlumt_options.diag_pivot_thresh = 0.0;
 
     superlumt_options.nprocs = nprocs;
     superlumt_options.fact = fact;
@@ -132,14 +142,16 @@ main(int argc, char *argv[])
     superlumt_options.relax = relax;
     superlumt_options.usepr = usepr;
     superlumt_options.drop_tol = drop_tol;
-    superlumt_options.diag_pivot_thresh = u;
-    superlumt_options.SymmetricMode = NO;
     superlumt_options.PrintStat = NO;
     superlumt_options.perm_c = perm_c;
     superlumt_options.perm_r = perm_r;
     superlumt_options.work = work;
     superlumt_options.lwork = lwork;
     
+    printf("sym_mode %d\tdiag_pivot_thresh %.4e\n", 
+	   superlumt_options.SymmetricMode,
+	   superlumt_options.diag_pivot_thresh);
+
     /* 
      * Solve the system and compute the condition number
      * and error bounds using pdgssvx.

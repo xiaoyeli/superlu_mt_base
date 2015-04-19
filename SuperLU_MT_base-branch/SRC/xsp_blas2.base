@@ -519,7 +519,7 @@ sp_@(pre)trsv(char *uplo, char *trans, char *diag, SuperMatrix *L,
 
 int_t
 sp_@(pre)gemv(char *trans, @(type) alpha, SuperMatrix *A, @(type) *x, 
-	 int incx, @(type) beta, @(type) *y, int incy)
+	 int_t incx, @(type) beta, @(type) *y, int_t incy)
 {
 /*  Purpose   
     =======   
@@ -581,7 +581,7 @@ sp_@(pre)gemv(char *trans, @(type) alpha, SuperMatrix *A, @(type) *x,
     /* Local variables */
     NCformat *Astore;
     @(type)   *Aval;
-    int_t info;
+    int info;
     @(type) temp;
     int_t lenx, leny, i, j, irow;
     int_t iy, jx, jy, kx, ky;
@@ -686,9 +686,9 @@ sp_@(pre)gemv(char *trans, @(type) alpha, SuperMatrix *A, @(type) *x,
 
 
 @precision DCOMPLEX SCOMPLEX
-int
+int_t
 sp_@(pre)gemv(char *trans, @(type) alpha, SuperMatrix *A, @(type) *x, 
-	 int incx, @(type) beta, @(type) *y, int incy)
+	 int_t incx, @(type) beta, @(type) *y, int_t incy)
 {
 /*  Purpose   
     =======   
@@ -748,7 +748,7 @@ sp_@(pre)gemv(char *trans, @(type) alpha, SuperMatrix *A, @(type) *x,
     /* Local variables */
     NCformat *Astore;
     @(type)   *Aval;
-    int_t info;
+    int info;
     @(type) temp, temp1;
     int_t lenx, leny, i, j, irow;
     int_t iy, jx, jy, kx, ky;

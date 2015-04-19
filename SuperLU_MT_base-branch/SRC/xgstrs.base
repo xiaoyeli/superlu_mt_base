@@ -78,7 +78,8 @@ void
 @precision !    
     register int_t j, k, jcol, iptr, luptr, ksupno, istart, irow, bptr;
     register int_t fsupc, nsuper;
-    int_t      i, n, nsupc, nsupr, nrow, nrhs, ldb;
+    int_t      n, nsupc, nsupr, nrow, nrhs, ldb;
+    int        i;
     int_t      *supno;
     DNformat *Bstore;
     SCPformat *Lstore;
@@ -367,5 +368,9 @@ void
     int_t i;
 
     for (i = 0; i < n; i++)
-	printf("\t%d: %.10f\n", i, soln[i]);
+@precision SINGLE DOUBLE 
+	printf("\t" IFMT ": %.10f\n", i, soln[i]);
+@precision SCOMPLEX DCOMPLEX
+	printf("\t" IFMT ": %.10f\t%.10f\n", i, soln[i].r, soln[i].i);
+@precision !
 }

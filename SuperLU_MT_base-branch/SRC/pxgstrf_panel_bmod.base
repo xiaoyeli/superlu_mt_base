@@ -5,7 +5,7 @@
 
 #define PRINT_SPIN_TIME(where)  { \
   if ( t2 > 0.001 ) { \
-      printf("[%d] Panel%6d on P%2d waits s-node%6d for %8.2f msec.\n",\
+      printf("[" IFMT "] Panel " IFMT " on P" IFMT " waits s-node"IFMT " for %8.2f msec.\n",\
 	     where, jcol, pnum, kcol, t2*1e3);\
       fflush(stdout); } }
 
@@ -14,10 +14,10 @@ check_panel_dfs_list(int_t pnum, char *msg, int_t jcol, int_t nseg, int_t *segre
 {
     register int_t k;
 
-    printf("(%d) p@(pre)gstrf_panel_bmod(%s) jcol %d, nseg %d in top. order ->\n",
+    printf("(" IFMT ") p@(pre)gstrf_panel_bmod(%s) jcol " IFMT ", nseg " IFMT " in top. order ->\n",
 	   pnum, msg, jcol, nseg);
     for (k = nseg-1; k >= 0; --k)
-	printf("(%d) segrep-%d ", pnum, segrep[k]);
+	printf("(" IFMT ") segrep-" IFMT, pnum, segrep[k]);
     printf("\n");
     fflush(stdout);
     return 0;

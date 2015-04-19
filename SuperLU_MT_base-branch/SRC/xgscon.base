@@ -63,7 +63,8 @@ void
 */
 
     /* Local variables */
-    int_t    kase, kase1, onenrm, i;
+    int_t    kase, kase1, onenrm;
+    int      i;
     @(mod_type) ainvnm;
     @(type) *work;
 @precision DOUBLE SINGLE

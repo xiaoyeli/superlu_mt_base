@@ -40,7 +40,8 @@ p@(pre)gstrf_snode_bmod(
     @(type)         alpha = none, beta = one;
 #endif
     
-    int_t            luptr, nsupc, nsupr, nrow;
+    int_t            luptr;
+    int              nsupc, nsupr, nrow;
     int_t            isub, irow, i, iptr; 
     register int_t   ufirst, nextlu;
     @(type)         *lusup;

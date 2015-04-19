@@ -122,7 +122,8 @@ p@(pre)gssv(int_t nprocs, SuperMatrix *A, int_t *perm_c, int_t *perm_r,
     DNformat *Bstore;
     SuperMatrix *AA; /* A in NC format used by the factorization routine.*/
     SuperMatrix AC; /* Matrix postmultiplied by Pc */
-    int_t i, n, panel_size, relax;
+    int_t  n, panel_size, relax;
+    int i;
     fact_t   fact;
     yes_no_t refact, usepr;
     @(mod_type) diag_pivot_thresh, drop_tol;
@@ -248,6 +249,6 @@ p@(pre)gssv(int_t nprocs, SuperMatrix *A, int_t *perm_c, int_t *perm_r,
 	ParallelProfile(n, Lstore->nsuper+1, Gstat.num_panels, nprocs, &Gstat);
     }
 #endif
-    PrintnStat(&Gstat);
+    PrintStat(&Gstat);
     StatFree(&Gstat);
 }

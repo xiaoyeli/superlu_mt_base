@@ -16,6 +16,7 @@
 @precision SCOMPLEX DCOMPLEX
 #include "slu_@(mod_pre)complex.h"
 @precision !
+#include "p@(pre)sp_defs.h"
 
 @precision SINGLE DOUBLE 
 /*

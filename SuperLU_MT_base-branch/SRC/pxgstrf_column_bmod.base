@@ -62,8 +62,9 @@ p@(pre)gstrf_column_bmod(
     @(type)	  ukj, ukj1, ukj2;
     register int_t lptr, kfnz, isub, irow, i, no_zeros;
     register int_t luptr, luptr1, luptr2;
-    int_t          fsupc, nsupc, nsupr, segsze;
-    int_t          nrow; /* No of rows in the matrix of matrix-vector */
+    int_t          fsupc, nsupc;
+    int          nsupr, segsze;
+    int          nrow; /* No of rows in the matrix of matrix-vector */
     int_t          jsupno, k, ksub, krep, krep_ind, ksupno;
     int_t          ufirst, nextlu;
     int_t          fst_col; /* First column within small LU update */
@@ -295,11 +296,11 @@ fsupc %d, nsupr %d, nsupc %d\n",
 		       &nsupr, tempv, &incx, &beta, tempv1, &incy );
 #endif
 #else
-		@(pre)lsolve ( nsupr, segsze, &lusup[luptr], tempv );
+		@(pre)lsolve ( (int_t) nsupr, (int_t) segsze, &lusup[luptr], tempv );
 
  		luptr += segsze;  /* Dense matrix-vector */
 		tempv1 = &tempv[segsze];
-		@(pre)matvec (nsupr, nrow , segsze, &lusup[luptr], tempv, tempv1);
+		@(pre)matvec ((int_t)nsupr, (int_t)nrow, (int_t)segsze, &lusup[luptr], tempv, tempv1);
 #endif
                 /* Scatter tempv[] into SPA dense[*] */
                 isub = lptr + no_zeros;

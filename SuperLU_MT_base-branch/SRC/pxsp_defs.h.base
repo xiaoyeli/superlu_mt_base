@@ -41,8 +41,10 @@
 /* Define my integer type int_t */
 #ifdef _LONGINT
 typedef long long int int_t;
+#define IFMT "%lld"
 #else
 typedef int int_t; /* default */
+#define IFMT "%8d"
 #endif
 
 #include "slu_mt_machines.h"

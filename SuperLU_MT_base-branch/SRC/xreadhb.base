@@ -13,14 +13,14 @@
 
 
 /* Eat up the rest of the current line */
-int @(pre)DumpLine(FILE *fp)
+int_t @(pre)DumpLine(FILE *fp)
 {
-    register int c;
+    register int_t c;
     while ((c = fgetc(fp)) != '\n') ;
     return 0;
 }
 
-int @(pre)ParseIntFormat(char *buf, int_t *num, int_t *size)
+int_t @(pre)ParseIntFormat(char *buf, int_t *num, int_t *size)
 {
     char *tmp;
 
@@ -33,7 +33,7 @@ int @(pre)ParseIntFormat(char *buf, int_t *num, int_t *size)
     return 0;
 }
 
-int @(pre)ParseFloatFormat(char *buf, int_t *num, int_t *size)
+int_t @(pre)ParseFloatFormat(char *buf, int_t *num, int_t *size)
 {
     char *tmp, *period;
     
@@ -60,7 +60,7 @@ int @(pre)ParseFloatFormat(char *buf, int_t *num, int_t *size)
     return 0;
 }
 
-int @(pre)ReadVector(FILE *fp, int_t n, int_t *where, int_t perline, int_t persize)
+int_t @(pre)ReadVector(FILE *fp, int_t n, int_t *where, int_t perline, int_t persize)
 {
     register int_t i, j, item;
     char tmp, buf[100];
@@ -81,7 +81,7 @@ int @(pre)ReadVector(FILE *fp, int_t n, int_t *where, int_t perline, int_t persi
 }
 
 @precision SINGLE DOUBLE
-int @(pre)ReadValues(FILE *fp, int_t n, @(type) *destination, int_t perline, int_t persize)
+int_t @(pre)ReadValues(FILE *fp, int_t n, @(type) *destination, int_t perline, int_t persize)
 {
     register int_t i, j, k, s;
     char tmp, buf[100];
@@ -105,7 +105,7 @@ int @(pre)ReadValues(FILE *fp, int_t n, @(type) *destination, int_t perline, int
 
 @precision SCOMPLEX DCOMPLEX
 /* Read complex numbers as pairs of (real, imaginary) */
-int @(pre)ReadValues(FILE *fp, int_t n, @(type) *destination, int_t perline, int_t persize)
+int_t @(pre)ReadValues(FILE *fp, int_t n, @(type) *destination, int_t perline, int_t persize)
 {
     register int_t i, j, k, s, pair;
     register @(mod_type) realpart;
@@ -227,7 +227,7 @@ void
     /* Line 2 */
     for (i=0; i<5; i++) {
 	fscanf(fp, "%14c", buf); buf[14] = 0;
-	sscanf(buf, "%d", &tmp);
+	tmp = atoi(buf); /*sscanf(buf, "%d", &tmp);*/
 	if (i == 3) numer_lines = tmp;
 	if (i == 4 && tmp) rhscrd = tmp;
     }

@@ -70,7 +70,7 @@ void
     extern double dlaran_();
     
     n = bs * nb;
-    printf("A block diagonal matrix: nb %d, bs %d, n %d\n", nb, bs, n);
+    printf("A block diagonal matrix: nb " IFMT ", bs " IFMT ", n " IFMT "\n", nb, bs, n);
     @(pre)allocateA(n, nonz, nzval, rowind, colptr); /* Allocate storage */
     a    = *nzval;
     asub = *rowind;

@@ -62,8 +62,8 @@ p@(pre)gstrf_bmod2D(
 
     @(type)       ukj, ukj1, ukj2;
     int_t          luptr, luptr1, luptr2;
-    int_t          segsze;
-    int_t          block_nrow;  /* no of rows in a block row */
+    int          segsze, nsupr32 = nsupr;
+    int          block_nrow;  /* no of rows in a block row */
     register int_t lptr;   /* point_ts to the row subscripts of a supernode */
     int_t          kfnz, irow, no_zeros; 
     register int_t isub, isub1, i;
@@ -324,7 +324,7 @@ p@(pre)gstrf_bmod2D(
 		   &nsupr, TriTmp, &incx, &beta, MatvecTmp, &incy );
 #endif /* _CRAY_PVP */
 #else
-	    @(pre)matvec(nsupr, block_nrow, segsze, &lusup[luptr1],
+	    @(pre)matvec((int_t) nsupr, (int_t) block_nrow, (int_t) segsze, &lusup[luptr1],
 		    TriTmp, MatvecTmp);
 #endif
 		

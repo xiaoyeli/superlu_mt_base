@@ -377,7 +377,8 @@ p@(pre)gssvx(int_t nprocs, superlumt_options_t *superlumt_options, SuperMatrix *
     int_t       colequ, equil, dofact, notran, rowequ;
     char      norm[1];
     trans_t   trant;
-    int_t       i, j, info1;
+    int_t     j, info1;
+    int i;
     @(mod_type) amax, anorm, bignum, smlnum, colcnd, rowcnd, rcmax, rcmin;
     int_t       n, relax, panel_size;
     Gstat_t   Gstat;

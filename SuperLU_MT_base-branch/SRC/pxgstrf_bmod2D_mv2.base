@@ -336,7 +336,7 @@ p@(pre)gstrf_bmod2D_mv2(
 			   &nsupr, tri[1], &incx, &beta, matvec[1], &incy );
 #else
 		    @(pre)gemv_( "N", &block_nrow, &segsze, &alpha, &lusup[luptr], 
-			   &nsupr, tri[1], &incx, &beta, matvec[1], &incy );
+			   &nsupr32, tri[1], &incx, &beta, matvec[1], &incy );
 #endif
 #else
 		    @(pre)matvec (nsupr, block_nrow, segsze, &lusup[luptr],
@@ -389,7 +389,7 @@ p@(pre)gstrf_bmod2D_mv2(
 		   &nsupr, tri[0], &incx, &beta, matvec[0], &incy );
 #else
 	    @(pre)gemv_( "N", &block_nrow, &segsze, &alpha, &lusup[luptr], 
-		   &nsupr, tri[0], &incx, &beta, matvec[0], &incy );
+		   &nsupr32, tri[0], &incx, &beta, matvec[0], &incy );
 #endif
 #else
 	    @(pre)matvec(nsupr, block_nrow, segsze, &lusup[luptr],

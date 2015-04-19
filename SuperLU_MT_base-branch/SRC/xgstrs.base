@@ -78,8 +78,7 @@ void
 @precision !    
     register int_t j, k, jcol, iptr, luptr, ksupno, istart, irow, bptr;
     register int_t fsupc, nsuper;
-    int_t      n, nsupc, nsupr, nrow, nrhs, ldb;
-    int        i;
+    int        i, n, nsupc, nsupr, nrow, nrhs, ldb;
     int_t      *supno;
     DNformat *Bstore;
     SCPformat *Lstore;
@@ -201,8 +200,8 @@ void
 #else		
 		for (j = 0, bptr = 0; j < nrhs; j++, bptr += ldb) {
 		    rhs_work = &Bmat[bptr];
-		    @(pre)lsolve (nsupr, nsupc, &Lval[luptr], &rhs_work[fsupc]);
-		    @(pre)matvec (nsupr, nrow, nsupc, &Lval[luptr+nsupc],
+		    @(pre)lsolve ((int_t)nsupr, (int_t)nsupc, &Lval[luptr], &rhs_work[fsupc]);
+		    @(pre)matvec ((int_t)nsupr, (int_t)nrow, (int_t)nsupc, &Lval[luptr+nsupc],
 			     &rhs_work[fsupc], &work[0] );
 
 		    iptr = istart + nsupc;

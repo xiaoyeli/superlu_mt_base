@@ -264,7 +264,7 @@ if (krep == BADCOL && jj == -1) {
 		  &nsupr, tempv, &incx );
 #else
 	    @(pre)trsv_( "L", "N", "U", &segsze, &lusup[luptr], 
-		   &nsupr, tempv, &incx );
+		   &nsupr32, tempv, &incx );
 #endif
 		
 	    luptr += segsze;	/* Dense matrix-vector */

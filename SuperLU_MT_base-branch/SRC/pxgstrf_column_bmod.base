@@ -62,8 +62,8 @@ p@(pre)gstrf_column_bmod(
     @(type)	  ukj, ukj1, ukj2;
     register int_t lptr, kfnz, isub, irow, i, no_zeros;
     register int_t luptr, luptr1, luptr2;
-    int_t          fsupc, nsupc;
-    int          nsupr, segsze;
+    int_t          fsupc;
+    int          nsupc, nsupr, segsze;
     int          nrow; /* No of rows in the matrix of matrix-vector */
     int_t          jsupno, k, ksub, krep, krep_ind, ksupno;
     int_t          ufirst, nextlu;

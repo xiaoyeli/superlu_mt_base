@@ -1,7 +1,7 @@
 @extract -b Typedef.inc
 #include <stdio.h>
 #include <stdlib.h>
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
 #define PRINT_SPIN_TIME(where)  { \
   if ( t2 > 0.001 ) { \

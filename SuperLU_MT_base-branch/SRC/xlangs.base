@@ -11,7 +11,7 @@
  * History:     Modified from lapack routine @(PRE)LANGE
  */
 #include <math.h>
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
 
 @(mod_type) @(pre)langs(char *norm, SuperMatrix *A)

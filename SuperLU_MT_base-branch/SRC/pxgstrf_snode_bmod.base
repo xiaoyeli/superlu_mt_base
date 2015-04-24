@@ -1,5 +1,5 @@
 @extract -b Typedef.inc
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
 int_t
 p@(pre)gstrf_snode_bmod(

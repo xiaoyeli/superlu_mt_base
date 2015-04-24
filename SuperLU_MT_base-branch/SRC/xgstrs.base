@@ -1,5 +1,5 @@
 @extract -b Typedef.inc
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
 void
 @(pre)gstrs(trans_t trans, SuperMatrix *L, SuperMatrix *U, 

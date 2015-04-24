@@ -1,6 +1,6 @@
 @extract -b Typedef.inc
 #include <stdlib.h> /* for getenv and atoi */
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
 void
 p@(pre)gstrf(superlumt_options_t *superlumt_options, SuperMatrix *A, int_t *perm_r,

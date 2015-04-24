@@ -11,7 +11,7 @@
  * History:     Modified from LAPACK routine @(PRE)LAQGE
  */
 #include <math.h>
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
 
 void

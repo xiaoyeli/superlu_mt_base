@@ -6,7 +6,7 @@
  * September 10, 2007
  *
  */
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
 main(int argc, char *argv[])
 {

@@ -8,7 +8,7 @@
  */
 #include <stdio.h>
 #include <math.h>
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
 #define SPLIT_TOP
 

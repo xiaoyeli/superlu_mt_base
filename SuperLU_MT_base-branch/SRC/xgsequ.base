@@ -8,7 +8,7 @@
  * History:     Modified from LAPACK routine @(PRE)GEEQU
  */
 #include <math.h>
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
 void
 @(pre)gsequ(SuperMatrix *A, @(mod_type) *r, @(mod_type) *c, @(mod_type) *rowcnd,

@@ -1,7 +1,7 @@
 @extract -b Typedef.inc
 #include <stdio.h>
 #include <stdlib.h>
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
 void @(pre)lsolve(int_t, int_t, @(type) *, @(type) *);
 void @(pre)matvec(int_t, int_t, int_t, @(type) *, @(type) *, @(type) *);

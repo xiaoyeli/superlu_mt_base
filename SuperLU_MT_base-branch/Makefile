@@ -32,7 +32,7 @@ single: $(TGTSRC)/psgssv.c \
 	$(TGTSRC)/psgstrf_thread_finalize.c \
 	$(TGTSRC)/psgstrf_thread_init.c \
 	$(TGTSRC)/psmemory.c \
-	$(TGTSRC)/pssp_defs.h \
+	$(TGTSRC)/slu_mt_sdefs.h \
 	$(TGTSRC)/psutil.c \
 	$(TGTSRC)/sgscon.c \
 	$(TGTSRC)/sgsequ.c \
@@ -126,7 +126,7 @@ $(TGTSRC)/psgstrf_thread_init.c:	$(SRC)/pxgstrf_thread_init.base
 $(TGTSRC)/psmemory.c:	$(SRC)/pxmemory.base
 	extract -b $? -o $@ precision=single
 
-$(TGTSRC)/pssp_defs.h:	$(SRC)/pxsp_defs.h.base
+$(TGTSRC)/slu_mt_sdefs.h:	$(SRC)/slu_mt_xdefs.h.base
 	extract -b $? -o $@ precision=single
 
 $(TGTSRC)/psutil.c:	$(SRC)/pxutil.base
@@ -231,7 +231,7 @@ double: $(TGTSRC)/pdgssv.c \
 	$(TGTSRC)/pdgstrf_thread_finalize.c \
 	$(TGTSRC)/pdgstrf_thread_init.c \
 	$(TGTSRC)/pdmemory.c \
-	$(TGTSRC)/pdsp_defs.h \
+	$(TGTSRC)/slu_mt_ddefs.h \
 	$(TGTSRC)/pdutil.c \
 	$(TGTSRC)/dgscon.c \
 	$(TGTSRC)/dgsequ.c \
@@ -325,7 +325,7 @@ $(TGTSRC)/pdgstrf_thread_init.c:	$(SRC)/pxgstrf_thread_init.base
 $(TGTSRC)/pdmemory.c:	$(SRC)/pxmemory.base
 	extract -b $? -o $@ precision=double
 
-$(TGTSRC)/pdsp_defs.h:	$(SRC)/pxsp_defs.h.base
+$(TGTSRC)/slu_mt_ddefs.h:	$(SRC)/slu_mt_xdefs.h.base
 	extract -b $? -o $@ precision=double
 
 $(TGTSRC)/pdutil.c:	$(SRC)/pxutil.base
@@ -431,7 +431,7 @@ scomplex: \
 	$(TGTSRC)/pcgstrf_thread_finalize.c \
 	$(TGTSRC)/pcgstrf_thread_init.c \
 	$(TGTSRC)/pcmemory.c \
-	$(TGTSRC)/pcsp_defs.h \
+	$(TGTSRC)/slu_mt_cdefs.h \
 	$(TGTSRC)/pcutil.c \
 	$(TGTSRC)/scomplex.c \
 	$(TGTSRC)/slu_scomplex.h \
@@ -527,7 +527,7 @@ $(TGTSRC)/pcgstrf_thread_init.c:	$(SRC)/pxgstrf_thread_init.base
 $(TGTSRC)/pcmemory.c:	$(SRC)/pxmemory.base
 	extract -b $? -o $@ precision=scomplex
 
-$(TGTSRC)/pcsp_defs.h:	$(SRC)/pxsp_defs.h.base
+$(TGTSRC)/slu_mt_cdefs.h:	$(SRC)/slu_mt_xdefs.h.base
 	extract -b $? -o $@ precision=scomplex
 
 $(TGTSRC)/pcutil.c:	$(SRC)/pxutil.base
@@ -639,7 +639,7 @@ dcomplex: \
 	$(TGTSRC)/pzgstrf_thread_finalize.c \
 	$(TGTSRC)/pzgstrf_thread_init.c \
 	$(TGTSRC)/pzmemory.c \
-	$(TGTSRC)/pzsp_defs.h \
+	$(TGTSRC)/slu_mt_zdefs.h \
 	$(TGTSRC)/pzutil.c \
 	$(TGTSRC)/dcomplex.c \
 	$(TGTSRC)/slu_dcomplex.h \
@@ -735,7 +735,7 @@ $(TGTSRC)/pzgstrf_thread_init.c:	$(SRC)/pxgstrf_thread_init.base
 $(TGTSRC)/pzmemory.c:	$(SRC)/pxmemory.base
 	extract -b $? -o $@ precision=dcomplex
 
-$(TGTSRC)/pzsp_defs.h:	$(SRC)/pxsp_defs.h.base
+$(TGTSRC)/slu_mt_zdefs.h:	$(SRC)/slu_mt_xdefs.h.base
 	extract -b $? -o $@ precision=dcomplex
 
 $(TGTSRC)/pzutil.c:	$(SRC)/pxutil.base

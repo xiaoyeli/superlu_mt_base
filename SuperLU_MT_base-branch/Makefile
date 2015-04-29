@@ -60,6 +60,7 @@ single: $(TGTSRC)/psgssv.c \
 	$(TGTEXM)/pslinsol.c \
 	$(TGTEXM)/pslinsolx.c \
 	$(TGTEXM)/pslinsolx1.c \
+	$(TGTEXM)/pslinsolx2.c \
 	$(TGTEXM)/psrepeat.c \
 	$(TGTEXM)/psspmd.c
 
@@ -204,6 +205,9 @@ $(TGTEXM)/pslinsolx.c:    $(EXM)/pxlinsolx.base
 $(TGTEXM)/pslinsolx1.c:    $(EXM)/pxlinsolx1.base
 	extract -b $? -o $@ precision=single
 
+$(TGTEXM)/pslinsolx2.c:    $(EXM)/pxlinsolx2.base
+	extract -b $? -o $@ precision=single
+
 $(TGTEXM)/psrepeat.c:    $(EXM)/pxrepeat.base
 	extract -b $? -o $@ precision=single
 
@@ -259,6 +263,7 @@ double: $(TGTSRC)/pdgssv.c \
 	$(TGTEXM)/pdlinsol.c \
 	$(TGTEXM)/pdlinsolx.c \
 	$(TGTEXM)/pdlinsolx1.c \
+	$(TGTEXM)/pdlinsolx2.c \
 	$(TGTEXM)/pdrepeat.c \
 	$(TGTEXM)/pdspmd.c
 
@@ -403,6 +408,9 @@ $(TGTEXM)/pdlinsolx.c:    $(EXM)/pxlinsolx.base
 $(TGTEXM)/pdlinsolx1.c:    $(EXM)/pxlinsolx1.base
 	extract -b $? -o $@ precision=double
 
+$(TGTEXM)/pdlinsolx2.c:    $(EXM)/pxlinsolx2.base
+	extract -b $? -o $@ precision=double
+
 $(TGTEXM)/pdrepeat.c:    $(EXM)/pxrepeat.base
 	extract -b $? -o $@ precision=double
 
@@ -461,6 +469,7 @@ scomplex: \
 	$(TGTEXM)/pclinsol.c \
 	$(TGTEXM)/pclinsolx.c \
 	$(TGTEXM)/pclinsolx1.c \
+	$(TGTEXM)/pclinsolx2.c \
 	$(TGTEXM)/pcrepeat.c \
 	$(TGTEXM)/pcspmd.c
 
@@ -611,6 +620,9 @@ $(TGTEXM)/pclinsolx.c:    $(EXM)/pxlinsolx.base
 $(TGTEXM)/pclinsolx1.c:    $(EXM)/pxlinsolx1.base
 	extract -b $? -o $@ precision=scomplex
 
+$(TGTEXM)/pclinsolx2.c:    $(EXM)/pxlinsolx2.base
+	extract -b $? -o $@ precision=scomplex
+
 $(TGTEXM)/pcrepeat.c:    $(EXM)/pxrepeat.base
 	extract -b $? -o $@ precision=scomplex
 
@@ -669,6 +681,7 @@ dcomplex: \
 	$(TGTEXM)/pzlinsol.c \
 	$(TGTEXM)/pzlinsolx.c \
 	$(TGTEXM)/pzlinsolx1.c \
+	$(TGTEXM)/pzlinsolx2.c \
 	$(TGTEXM)/pzrepeat.c \
 	$(TGTEXM)/pzspmd.c
 
@@ -817,6 +830,9 @@ $(TGTEXM)/pzlinsolx.c:    $(EXM)/pxlinsolx.base
 	extract -b $? -o $@ precision=dcomplex
 
 $(TGTEXM)/pzlinsolx1.c:    $(EXM)/pxlinsolx1.base
+	extract -b $? -o $@ precision=dcomplex
+
+$(TGTEXM)/pzlinsolx2.c:    $(EXM)/pxlinsolx2.base
 	extract -b $? -o $@ precision=dcomplex
 
 $(TGTEXM)/pzrepeat.c:    $(EXM)/pxrepeat.base

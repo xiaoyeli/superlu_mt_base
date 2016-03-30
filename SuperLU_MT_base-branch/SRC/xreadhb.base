@@ -252,9 +252,6 @@ void
 	printf("Matrix is not square.\n");
     @(pre)DumpLine(fp);
 
-    /* Allocate storage for the three arrays ( nzval, rowind, colptr ) */
-    @(pre)allocateA(*ncol, *nonz, nzval, rowind, colptr);
-
     /* Line 4: format statement */
     fscanf(fp, "%16c", buf);
     @(pre)ParseIntFormat(buf, &colnum, &colsize);
@@ -275,6 +272,9 @@ void
     printf("valnum %d, valsize %d\n", valnum, valsize);
 #endif
     
+    /* Allocate storage for the three arrays ( nzval, rowind, colptr ) */
+    @(pre)allocateA(*ncol, *nonz, nzval, rowind, colptr);
+
     @(pre)ReadVector(fp, *ncol+1, *colptr, colnum, colsize);
     @(pre)ReadVector(fp, *nonz, *rowind, rownum, rowsize);
     if ( numer_lines ) {

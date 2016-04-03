@@ -1,6 +1,16 @@
+/*! \file
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
 @extract -b Typedef.inc
 /*
- * -- SuperLU MT routine (version 2.0) --
+ * -- SuperLU MT routine (version 3.0) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley,
  * and Xerox Palo Alto Research Center.
  * September 10, 2007
@@ -8,24 +18,24 @@
  */
 #include <stdio.h>
 #include <math.h>
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
 #define SPLIT_TOP
 
-int
-@(pre)ParallelInit(int n, pxgstrf_relax_t *pxgstrf_relax, 
+int_t
+@(pre)ParallelInit(int_t n, pxgstrf_relax_t *pxgstrf_relax, 
 	     p@(pre)gstrf_options_t *p@(pre)gstrf_options, 
 	     pxgstrf_shared_t *pxgstrf_shared)
 {
-    int      *etree = p@(pre)gstrf_options->etree;
-    register int w, dad, ukids, i, j, k, rs, panel_size, relax;
-    register int P, w_top, do_split = 0;
+    int_t      *etree = p@(pre)gstrf_options->etree;
+    register int_t w, dad, ukids, i, j, k, rs, panel_size, relax;
+    register int_t P, w_top, do_split = 0;
     panel_t panel_type;
-    int      *panel_histo = pxgstrf_shared->Gstat->panel_histo;
-    register int nthr, concurrency, info;
+    int_t      *panel_histo = pxgstrf_shared->Gstat->panel_histo;
+    register int_t nthr, concurrency, info;
 
 #if ( MACH==SUN )
-    register int sync_type = USYNC_THREAD;
+    register int_t sync_type = USYNC_THREAD;
     
     /* Set concurrency level. */
     nthr = sysconf(_SC_NPROCESSORS_ONLN);

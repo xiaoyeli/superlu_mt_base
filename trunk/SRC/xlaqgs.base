@@ -1,6 +1,16 @@
+/*! \file
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
 @extract -b Typedef.inc
 /*
- * -- SuperLU routine (version 2.0) --
+ * -- SuperLU routine (version 3.0) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley,
  * and Xerox Palo Alto Research Center.
  * September 10, 2007
@@ -11,7 +21,7 @@
  * History:     Modified from LAPACK routine @(PRE)LAQGE
  */
 #include <math.h>
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
 
 void
@@ -80,7 +90,7 @@ void
     /* Local variables */
     NCformat *Astore;
     @(type)   *Aval;
-    int i, j, irow;
+    int_t i, j, irow;
     @(mod_type) large, small, cj;
 @precision DOUBLE DCOMPLEX
     extern double dlamch_(char *);

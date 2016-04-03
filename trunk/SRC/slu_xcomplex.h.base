@@ -1,6 +1,16 @@
+/*! \file
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
 @extract -b Typedef.inc
 /*
- * -- SuperLU routine (version 2.0) --
+ * -- SuperLU routine (version 3.0) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley,
  * and Xerox Palo Alto Research Center.
  * September 10, 2007
@@ -72,7 +82,7 @@ void @(pre)_add(@(type) *, @(type) *, @(type) *);
 void @(pre)_sub(@(type) *, @(type) *, @(type) *);
 void @(pre)@(mod_pre)_mult(@(type) *, @(type) *, @(mod_type) *);
 void @(pre)@(pre)_mult(@(type) *, @(type) *, @(type) *);
-int @(pre)_eq(@(type) *, @(type) *);
+int_t @(pre)_eq(@(type) *, @(type) *);
 @precision !
 
 #ifdef __cplusplus

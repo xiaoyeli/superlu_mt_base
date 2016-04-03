@@ -1,10 +1,20 @@
+/*! \file
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
 @extract -b Typedef.inc
 #include <math.h>
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
-int p@(pre)gst07(trans_t *trans, int n, int nrhs, SuperMatrix *A, @(type) *b, 
-	    int ldb, @(type) *x, int ldx, @(type) *xact, 
-	    int ldxact, @(mod_type) *ferr, @(mod_type) *berr, @(mod_type) *reslts)
+int_t p@(pre)gst07(trans_t *trans, int_t n, int_t nrhs, SuperMatrix *A, @(type) *b, 
+	    int_t ldb, @(type) *x, int_t ldx, @(type) *xact, 
+	    int_t ldxact, @(mod_type) *ferr, @(mod_type) *berr, @(mod_type) *reslts)
 {
 /*
  * -- SuperLU MT routine (version 2.0) --
@@ -36,10 +46,10 @@ int p@(pre)gst07(trans_t *trans, int n, int nrhs, SuperMatrix *A, @(type) *b,
  *          = TRANS:   A**T * X = B  (Transpose)   
  *          = CONJ:    A**H * X = B  (Conjugate transpose = Transpose)   
  *
- *  N       (input) INT
+ *  N       (input) INT_T
  *          The number of rows of the matrices X and XACT.  N >= 0.   
  *
- *  NRHS    (input) INT   
+ *  NRHS    (input) INT_T   
  *          The number of columns of the matrices X and XACT.  NRHS >= 0. 
  *
  *  A       (input) SuperMatrix *, dimension (A->nrow, A->ncol)
@@ -49,21 +59,21 @@ int p@(pre)gst07(trans_t *trans, int n, int nrhs, SuperMatrix *A, @(type) *b,
  *          The right hand side vectors for the system of linear   
  *          equations.   
  *
- *  LDB     (input) INT   
+ *  LDB     (input) INT_T   
  *          The leading dimension of the array B.  LDB >= max(1,N).   
  *
  *  X       (input) DOUBLE PRECISION array, dimension (LDX,NRHS)   
  *          The computed solution vectors.  Each vector is stored as a   
  *          column of the matrix X.   
  *
- *  LDX     (input) INT   
+ *  LDX     (input) INT_T   
  *          The leading dimension of the array X.  LDX >= max(1,N).   
  *
  *  XACT    (input) DOUBLE PRECISION array, dimension (LDX,NRHS)   
  *          The exact solution vectors.  Each vector is stored as a   
  *          column of the matrix XACT.   
  *
- *  LDXACT  (input) INT   
+ *  LDXACT  (input) INT_T   
  *          The leading dimension of the array XACT.  LDXACT >= max(1,N). 
  *
  *
@@ -98,12 +108,13 @@ int p@(pre)gst07(trans_t *trans, int n, int nrhs, SuperMatrix *A, @(type) *b,
 
     /* Local variables */
     @(mod_type) diff, axbi;
-    int    imax, irow, n__1;
-    int    i, j, k;
+    int_t    imax, irow;
+    int_t    i, j, k;
+    int      n__1;
     @(mod_type) unfl, ovfl;
     @(mod_type) xnorm;
     @(mod_type) errbnd;
-    int    notran;
+    int_t    notran;
     @(mod_type) eps, tmp;
     @(mod_type) *rwork;
     @(type) *Aval;

@@ -1,6 +1,16 @@
+/*! \file
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
 @extract -b Typedef.inc
 /*
- * -- SuperLU routine (version 2.0) --
+ * -- SuperLU routine (version 3.0) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley,
  * and Xerox Palo Alto Research Center.
  * September 10, 2007
@@ -16,6 +26,7 @@
 @precision SCOMPLEX DCOMPLEX
 #include "slu_@(mod_pre)complex.h"
 @precision !
+#include "slu_mt_@(pre)defs.h"
 
 @precision SINGLE DOUBLE 
 /*
@@ -23,13 +34,13 @@
  * triangular matrix is stored in a 2D array M(1:nrow,1:ncol). 
  * The solution will be returned in the rhs vector.
  */
-void @(pre)lsolve ( int ldm, int ncol, @(type) *M, @(type) *rhs )
+void @(pre)lsolve ( int_t ldm, int_t ncol, @(type) *M, @(type) *rhs )
 {
-    int k;
+    int_t k;
     @(type) x0, x1, x2, x3, x4, x5, x6, x7;
     @(type) *M0;
     register @(type) *Mki0, *Mki1, *Mki2, *Mki3, *Mki4, *Mki5, *Mki6, *Mki7;
-    register int firstcol = 0;
+    register int_t firstcol = 0;
 
     M0 = &M[0];
 
@@ -122,14 +133,14 @@ void @(pre)lsolve ( int ldm, int ncol, @(type) *M, @(type) *rhs )
  */
 void
 @(pre)usolve (
-int ldm,     /* in */
-int ncol,    /* in */
+int_t ldm,     /* in */
+int_t ncol,    /* in */
 @(type) *M,  /* in */
 @(type) *rhs /* modified */
 )
 {
     @(type) xj;
-    int jcol, j, irow;
+    int_t jcol, j, irow;
 
     jcol = ncol - 1;
 
@@ -152,9 +163,9 @@ int ncol,    /* in */
  * The input matrix is M(1:nrow,1:ncol); The product is returned in Mxvec[].
  */
 void @(pre)matvec (
-int ldm,	/* in -- leading dimension of M */
-int nrow,	/* in */ 
-int ncol,	/* in */
+int_t ldm,	/* in -- leading dimension of M */
+int_t nrow,	/* in */ 
+int_t ncol,	/* in */
 @(type) *M,	/* in */
 @(type) *vec,	/* in */
 @(type) *Mxvec	/* in/out */
@@ -163,8 +174,8 @@ int ncol,	/* in */
     @(type) vi0, vi1, vi2, vi3, vi4, vi5, vi6, vi7;
     @(type) *M0;
     register @(type) *Mki0, *Mki1, *Mki2, *Mki3, *Mki4, *Mki5, *Mki6, *Mki7;
-    register int firstcol = 0;
-    int k;
+    register int_t firstcol = 0;
+    int_t k;
 
     M0 = &M[0];
     while ( firstcol < ncol - 7 ) {	/* Do 8 columns */
@@ -232,9 +243,9 @@ int ncol,	/* in */
  *        y1 = y1 + A * x1
  */
 void @(pre)matvec2 (
-               int lda,     /* leading dimension of A */
-               int m,
-               int n,
+               int_t lda,     /* leading dimension of A */
+               int_t m,
+               int_t n,
                @(type) *A,   /* in - size m-by-n */
                @(type) *x0,  /* in - size n-by-1 */
                @(type) *x1,  /* in - size n-by-1 */
@@ -248,9 +259,9 @@ void @(pre)matvec2 (
     register @(type) t0, t1, t2, t3, t4, t5, t6, t7;
     register @(type) f0, f1;
     @(type) *Mki0, *Mki1, *Mki2, *Mki3, *Mki4, *Mki5, *Mki6, *Mki7;
-    register int firstcol = 0;
+    register int_t firstcol = 0;
     @(type) *M0;
-    int k;
+    int_t k;
 
     M0 = &A[0];
 
@@ -345,13 +356,13 @@ void @(pre)matvec2 (
  * triangular matrix is stored in a 2D array M(1:nrow,1:ncol). 
  * The solution will be returned in the rhs vector.
  */
-void @(pre)lsolve ( int ldm, int ncol, @(type) *M, @(type) *rhs )
+void @(pre)lsolve ( int_t ldm, int_t ncol, @(type) *M, @(type) *rhs )
 {
-    int k;
+    int_t k;
     @(type) x0, x1, x2, x3, temp;
     @(type) *M0;
     @(type) *Mki0, *Mki1, *Mki2, *Mki3;
-    register int firstcol = 0;
+    register int_t firstcol = 0;
 
     M0 = &M[0];
 
@@ -423,14 +434,14 @@ void @(pre)lsolve ( int ldm, int ncol, @(type) *M, @(type) *rhs )
  */
 void
 @(pre)usolve (
-int ldm,	/* in */
-int ncol,	/* in */
+int_t ldm,	/* in */
+int_t ncol,	/* in */
 @(type) *M,	/* in */
 @(type) *rhs	/* modified */
 )
 {
     @(type) xj, temp;
-    int jcol, j, irow;
+    int_t jcol, j, irow;
 
     jcol = ncol - 1;
 
@@ -455,9 +466,9 @@ int ncol,	/* in */
  * The input matrix is M(1:nrow,1:ncol); The product is returned in Mxvec[].
  */
 void @(pre)matvec (
-int ldm,	/* in -- leading dimension of M */
-int nrow,	/* in */ 
-int ncol,	/* in */
+int_t ldm,	/* in -- leading dimension of M */
+int_t nrow,	/* in */ 
+int_t ncol,	/* in */
 @(type) *M,	/* in */
 @(type) *vec,	/* in */
 @(type) *Mxvec	/* in/out */
@@ -466,8 +477,8 @@ int ncol,	/* in */
     @(type) vi0, vi1, vi2, vi3;
     @(type) *M0, temp;
     @(type) *Mki0, *Mki1, *Mki2, *Mki3;
-    register int firstcol = 0;
-    int k;
+    register int_t firstcol = 0;
+    int_t k;
 
     M0 = &M[0];
 
@@ -503,6 +514,88 @@ int ncol,	/* in */
 	    @(pre)_add(&Mxvec[k], &Mxvec[k], &temp);
 	}
 	M0 += ldm;
+    }
+	
+}
+
+/*
+ * Performs dense matrix-vector multiply with 2 vectors:
+ *        y0 = y0 + A * x0
+ *        y1 = y1 + A * x1
+ */
+void @(pre)matvec2 (
+               int_t lda,     /* leading dimension of A */
+               int_t m,
+               int_t n,
+               @(type) *A,   /* in - size m-by-n */
+               @(type) *x0,  /* in - size n-by-1 */
+               @(type) *x1,  /* in - size n-by-1 */
+               @(type) *y0,  /* out - size n-by-1 */
+               @(type) *y1   /* out - size n-by-1 */
+               )
+{
+    @(type) v00, v10, v20, v30, v01, v11, v21, v31;
+    @(type) *M0, temp, t0, t1, t2, t3;
+    @(type) *Mki0, *Mki1, *Mki2, *Mki3;
+    register int_t firstcol = 0;
+    int_t k;
+
+    M0 = &A[0];
+
+    while ( firstcol < n - 3 ) {	/* Do 4 columns */
+	Mki0 = M0;
+	Mki1 = Mki0 + lda;
+	Mki2 = Mki1 + lda;
+	Mki3 = Mki2 + lda;
+
+        v00 = x0[firstcol];   v01 = x1[firstcol++];
+        v10 = x0[firstcol];   v11 = x1[firstcol++];
+        v20 = x0[firstcol];   v21 = x1[firstcol++];
+        v30 = x0[firstcol];   v31 = x1[firstcol++];
+
+	for (k = 0; k < m; k++) {
+	    t0 = Mki0[k];
+	    t1 = Mki1[k];
+	    t2 = Mki2[k];
+	    t3 = Mki3[k];
+	    
+	    @(pre)@(pre)_mult(&temp, &v00, &t0);
+	    @(pre)_add(&y0[k], &y0[k], &temp);
+	    @(pre)@(pre)_mult(&temp, &v01, &t0);
+	    @(pre)_add(&y1[k], &y1[k], &temp);
+
+	    @(pre)@(pre)_mult(&temp, &v10, &t1);
+	    @(pre)_add(&y0[k], &y0[k], &temp);
+	    @(pre)@(pre)_mult(&temp, &v11, &t1);
+	    @(pre)_add(&y1[k], &y1[k], &temp);
+
+	    @(pre)@(pre)_mult(&temp, &v20, &t2);
+	    @(pre)_add(&y0[k], &y0[k], &temp);
+	    @(pre)@(pre)_mult(&temp, &v21, &t2);
+	    @(pre)_add(&y1[k], &y1[k], &temp);
+
+	    @(pre)@(pre)_mult(&temp, &v30, &t3);
+	    @(pre)_add(&y0[k], &y0[k], &temp);
+	    @(pre)@(pre)_mult(&temp, &v31, &t3);
+	    @(pre)_add(&y1[k], &y1[k], &temp);
+	}
+
+	M0 += 4 * lda;
+    }
+
+    while ( firstcol < n ) {		/* Do 1 column */
+ 	Mki0 = M0;
+        v00 = x0[firstcol];   v01 = x1[firstcol++];
+
+	for (k = 0; k < m; k++) {
+	    t0 = Mki0[k];
+	    
+	    @(pre)@(pre)_mult(&temp, &v00, &t0);
+	    @(pre)_add(&y0[k], &y0[k], &temp);
+	    @(pre)@(pre)_mult(&temp, &v01, &t0);
+	    @(pre)_add(&y1[k], &y1[k], &temp);
+	}
+	M0 += lda;
     }
 	
 }

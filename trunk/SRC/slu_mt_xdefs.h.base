@@ -20,11 +20,11 @@ at the top-level directory.
  *
  */
 
-#ifndef __SUPERLU_@(pre)SP_DEFS /* allow multiple inclusions */
-#define __SUPERLU_@(pre)SP_DEFS
+#ifndef __SLU_MT_@(PRE)DEFS /* allow multiple inclusions */
+#define __SLU_MT_@(PRE)DEFS
 
 /*
- * File name:           p@(pre)sp_defs.h
+ * File name:           slu_mt_@(pre)defs.h
  * Purpose:             Sparse matrix types and function prototypes
  * History:
  */
@@ -498,5 +498,5 @@ extern void    check_repfnz(int_t, int_t, int_t, int_t *);
 #endif
 
 
-#endif /* __SUPERLU_@(PRE)SP_DEFS */
+#endif /* __SLU_MT_@(PRE)DEFS */
 

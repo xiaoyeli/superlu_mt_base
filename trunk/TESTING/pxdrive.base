@@ -1,14 +1,31 @@
+/*! \file
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
 @extract -b Typedef.inc
 #include <string.h>
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
 #define NTESTS    5    /* Number of test types */
 #define NTYPES    11   /* Number of matrix types */
 #define NTRAN     2    
 #define THRESH    40.0
+
+#if defined ( _LONGINT )
+#define FMT1      "%10s:n=%lld, test(%d)=%12.5g\n"
+#define	FMT2      "%10s:fact=%d, trans=%d, refact=%d, equed=%d, n=%lld, imat=%d, test(%d)=%12.5g\n"
+#define FMT3      "%10s:info=%lld, izero=%lld, n=%lld, nrhs=%lld, imat=%d, nfail=%d\n"
+#else
 #define FMT1      "%10s:n=%d, test(%d)=%12.5g\n"
 #define	FMT2      "%10s:fact=%d, trans=%d, refact=%d, equed=%d, n=%d, imat=%d, test(%d)=%12.5g\n"
 #define FMT3      "%10s:info=%d, izero=%d, n=%d, nrhs=%d, imat=%d, nfail=%d\n"
+#endif
 
 
 main(int argc, char *argv[])
@@ -31,12 +48,12 @@ main(int argc, char *argv[])
  * =====================================================================
  */
     @(type)         *a, *a_save;
-    int            *asub, *asub_save;
-    int            *xa, *xa_save;
+    int_t            *asub, *asub_save;
+    int_t            *xa, *xa_save;
     SuperMatrix    A, B, X, L, U;
     SuperMatrix    ASAV, AC;
-    int            *perm_r; /* row permutation from partial pivoting */
-    int            *perm_c, *pc_save; /* column permutation */
+    int_t            *perm_r; /* row permutation from partial pivoting */
+    int_t            *perm_c, *pc_save; /* column permutation */
 @precision SINGLE DOUBLE
     @(type)  zero = 0.0;
 @precision SCOMPLEX DCOMPLEX
@@ -48,20 +65,22 @@ main(int argc, char *argv[])
     @(type)	   *wwork;
     @(mod_type)          diag_pivot_thresh, drop_tol;
     void           *work;
-    int            info, lwork, nrhs, panel_size, relax;
-    int            nprocs, m, n, nnz;
+    int_t            info, lwork, nrhs, panel_size, relax;
+    int_t            nprocs, m, n, nnz;
+    int              n32, info32;
     @(type)        *xact;
     @(type)        *rhsb, *solx, *bsav;
-    int            ldb, ldx;
+    int_t            ldb, ldx;
     @(mod_type)          rpg, rcond;
     int            i, j, k1;
     @(mod_type)         rowcnd, colcnd, amax;
-    int            maxsuper, rowblk, colblk;
-    int            prefact, dofact, equil, iequed, norefact;
+    int_t            maxsuper, rowblk, colblk;
+    int_t            prefact, dofact, equil, iequed, norefact;
     int            nt, nrun, nfail, nerrs, imat, fimat, nimat;
-    int            nfact, ifact, nrefact, irefact, nusepr, iusepr, itran;
-    int            kl, ku, mode, lda;
-    int            zerot, izero, ioff;
+    int_t            nfact, ifact, nrefact, irefact, nusepr, iusepr, itran;
+    int_t            kl, ku, lda;
+    int            kl32, ku32, mode, lda32;
+    int_t            zerot, izero, ioff;
     @(mod_type)         anorm, cndnum;
     @(type)         *Afull;
     @(mod_type)         result[NTESTS];
@@ -85,22 +104,22 @@ main(int argc, char *argv[])
     yes_no_t useprs[] = {YES, NO};
 
     /* Some function prototypes */
-    extern int p@(pre)gst01(int, int, SuperMatrix *, SuperMatrix *,
-                         SuperMatrix *, int *, int *, @(mod_type) *);
-    extern int p@(pre)gst02(trans_t, int, int, int, SuperMatrix *, @(type) *,
-                         int, @(type) *, int, @(mod_type) *resid);
-    extern int p@(pre)gst04(int, int, @(type) *, int,
-                         @(type) *, int, @(mod_type) rcond, @(mod_type) *resid);
-    extern int p@(pre)gst07(trans_t, int, int, SuperMatrix *, @(type) *, int,
-                         @(type) *, int, @(type) *, int,
+    extern int_t p@(pre)gst01(int_t, int_t, SuperMatrix *, SuperMatrix *,
+                         SuperMatrix *, int_t *, int_t *, @(mod_type) *);
+    extern int_t p@(pre)gst02(trans_t, int_t, int_t, int_t, SuperMatrix *, @(type) *,
+                         int_t, @(type) *, int_t, @(mod_type) *resid);
+    extern int_t p@(pre)gst04(int_t, int_t, @(type) *, int_t,
+                         @(type) *, int_t, @(mod_type) rcond, @(mod_type) *resid);
+    extern int_t p@(pre)gst07(trans_t, int_t, int_t, SuperMatrix *, @(type) *, int_t,
+                         @(type) *, int_t, @(type) *, int_t,
                          @(mod_type) *, @(mod_type) *, @(mod_type) *);
     extern int @(pre)latb4_(char *, int *, int *, int *, char *, int *, int *,
                        @(mod_type) *, int *, @(mod_type) *, char *);
     extern int @(pre)latms_(int *, int *, char *, int *, char *, @(mod_type) *d,
                        int *, @(mod_type) *, @(mod_type) *, int *, int *,
                        char *, @(type) *, int *, @(type) *, int *);
-    extern int sp_@(pre)convert(int, int, @(type) *, int, int, int,
-                           @(type) *a, int *, int *, int *);
+    extern int_t sp_@(pre)convert(int_t, int_t, @(type) *, int_t, int_t, int_t,
+                           @(type) *a, int_t *, int_t *, int_t *);
 
 
     /* Executable statements */
@@ -128,14 +147,14 @@ main(int argc, char *argv[])
     if ( lwork > 0 ) {
 	work = SUPERLU_MALLOC(lwork);
 	if ( !work ) {
-	    fprintf(stderr, "expert: cannot allocate %d bytes\n", lwork);
+	    fprintf(stderr, "expert: cannot allocate " IFMT " bytes\n", lwork);
 	    exit (-1);
 	}
 	bzero(work, lwork);
     }
 
 #if ( DEBUGlevel>=1 )
-    printf("n = %4d, nprocs = %4d, w = %4d, relax = %4d\n",
+    printf("n = " IFMT ", nprocs = " IFMT ", w = " IFMT ", relax = " IFMT "\n",
 	   n, nprocs, panel_size, relax);
 #endif
 
@@ -206,13 +225,17 @@ main(int argc, char *argv[])
 	    
 	    /* Set up parameters with @(PRE)LATB4 and generate a test matrix
 	       with @(PRE)LATMS.  */
-	    @(pre)latb4_(path, &imat, &n, &n, sym, &kl, &ku, &anorm, &mode,
+            n32 = n;  kl32 = kl; ku32 = ku;
+	    @(pre)latb4_(path, &imat, &n32, &n32, sym, &kl32, &ku32, &anorm, &mode,
 		    &cndnum, dist);
+	    kl = kl32; ku = ku32;
 
-	    @(pre)latms_(&n, &n, dist, iseed, sym, &rwork[0], &mode, &cndnum,
-		    &anorm, &kl, &ku, "No packing", Afull, &lda,
-		    &wwork[0], &info);
-
+            lda32 = lda;
+	    @(pre)latms_(&n32, &n32, dist, iseed, sym, &rwork[0], &mode, &cndnum,
+		    &anorm, &kl32, &ku32, "No packing", Afull, &lda32,
+		    &wwork[0], &info32);
+            info = info32;
+            
 	    if ( info ) {
 		printf(FMT3, "@(PRE)LATMS", info, izero, n, nrhs, imat, nfail);
 		continue;
@@ -336,10 +359,10 @@ main(int argc, char *argv[])
 			    superlumt_options.diag_pivot_thresh=diag_pivot_thresh;
 
 			    if ( info ) { 
-			        printf("** First factor: info %d, equed %d\n",
+			        printf("** First factor: info " IFMT ", equed %d\n",
 				       info, equed);
 				if ( lwork == -1 ) {
-				  printf("** Estimated memory: %d bytes\n",
+				  printf("** Estimated memory: " IFMT " bytes\n",
 					 info - n);
 				  exit(0);
 				}
@@ -373,7 +396,7 @@ main(int argc, char *argv[])
 				       &X, &info);
 
 #if ( DEBUGlevel>=1 )
-			    printf("Test P@(PRE)GSSV: info = %d\n", info);
+			    printf("Test P@(PRE)GSSV: info = " IFMT "\n", info);
 #endif
 				if ( info && info != izero ) {
                                     printf(FMT3, "p@(pre)gssv",
@@ -434,6 +457,14 @@ main(int argc, char *argv[])
 			    superlumt_options.trans = trans;
 			    superlumt_options.refact = refact;
 			    superlumt_options.usepr = usepr;
+			    if ( !prefact ) {
+			       if ( !(superlumt_options.etree = intMalloc(n)) )
+			       	  SUPERLU_ABORT("Malloc fails for etree[].");
+			       if ( !(superlumt_options.colcnt_h = intMalloc(n)) )
+				  SUPERLU_ABORT("Malloc fails for colcnt_h[].");
+			       if ( !(superlumt_options.part_super_h = intMalloc(n)) )
+				  SUPERLU_ABORT("Malloc fails for colcnt_h[].");
+			    }
 
 			    /* Solve the system and compute the condition 
 			       number and error bounds using p@(pre)gssvx.   */
@@ -443,7 +474,7 @@ main(int argc, char *argv[])
 				    &superlu_memusage, &info);
 
 #if ( DEBUGlevel>=1 )
-			    printf("Test P@(PRE)GSSVX: info %d\n", info);
+			    printf("Test P@(PRE)GSSVX: info " IFMT "\n", info);
 #endif
 			    if ( info && info != izero ) {
 			        printf(FMT3, "p@(pre)gssvx",
@@ -505,6 +536,8 @@ main(int argc, char *argv[])
 				    bzero(work, lwork);
 				    /*for (i = 0; i < lwork; ++i) 
 				        ((char*)work)[i] = 0;*/
+	                            Destroy_SuperMatrix_Store(&L);
+	                            Destroy_SuperMatrix_Store(&U);
 				}
 			    }
 			} /* for itran ... */
@@ -517,13 +550,13 @@ main(int argc, char *argv[])
 			        bzero(work,lwork);
 			        /*for (i = 0; i < lwork; ++i)
 				   ((char*)work)[i] = 0;*/
+	                        Destroy_SuperMatrix_Store(&L);
+	                        Destroy_SuperMatrix_Store(&U);
 			    }
 			}
-			if ( refact == YES ) {
-			    SUPERLU_FREE(superlumt_options.etree);
-			    SUPERLU_FREE(superlumt_options.colcnt_h);
-			    SUPERLU_FREE(superlumt_options.part_super_h);
-			}
+			SUPERLU_FREE(superlumt_options.etree);
+			SUPERLU_FREE(superlumt_options.colcnt_h);
+			SUPERLU_FREE(superlumt_options.part_super_h);
 		    } /* for iusepr ... */
 		} /* for irefact ... */
 	    } /* for ifact ... */
@@ -566,8 +599,6 @@ main(int argc, char *argv[])
     Destroy_SuperMatrix_Store(&X);
     if ( lwork > 0 ) {
 	SUPERLU_FREE (work);
-	Destroy_SuperMatrix_Store(&L);
-	Destroy_SuperMatrix_Store(&U);
     }
 
     return 0;

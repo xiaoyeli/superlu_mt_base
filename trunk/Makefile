@@ -32,7 +32,7 @@ single: $(TGTSRC)/psgssv.c \
 	$(TGTSRC)/psgstrf_thread_finalize.c \
 	$(TGTSRC)/psgstrf_thread_init.c \
 	$(TGTSRC)/psmemory.c \
-	$(TGTSRC)/pssp_defs.h \
+	$(TGTSRC)/slu_mt_sdefs.h \
 	$(TGTSRC)/psutil.c \
 	$(TGTSRC)/sgscon.c \
 	$(TGTSRC)/sgsequ.c \
@@ -60,6 +60,7 @@ single: $(TGTSRC)/psgssv.c \
 	$(TGTEXM)/pslinsol.c \
 	$(TGTEXM)/pslinsolx.c \
 	$(TGTEXM)/pslinsolx1.c \
+	$(TGTEXM)/pslinsolx2.c \
 	$(TGTEXM)/psrepeat.c \
 	$(TGTEXM)/psspmd.c
 
@@ -126,7 +127,7 @@ $(TGTSRC)/psgstrf_thread_init.c:	$(SRC)/pxgstrf_thread_init.base
 $(TGTSRC)/psmemory.c:	$(SRC)/pxmemory.base
 	extract -b $? -o $@ precision=single
 
-$(TGTSRC)/pssp_defs.h:	$(SRC)/pxsp_defs.h.base
+$(TGTSRC)/slu_mt_sdefs.h:	$(SRC)/slu_mt_xdefs.h.base
 	extract -b $? -o $@ precision=single
 
 $(TGTSRC)/psutil.c:	$(SRC)/pxutil.base
@@ -204,6 +205,9 @@ $(TGTEXM)/pslinsolx.c:    $(EXM)/pxlinsolx.base
 $(TGTEXM)/pslinsolx1.c:    $(EXM)/pxlinsolx1.base
 	extract -b $? -o $@ precision=single
 
+$(TGTEXM)/pslinsolx2.c:    $(EXM)/pxlinsolx2.base
+	extract -b $? -o $@ precision=single
+
 $(TGTEXM)/psrepeat.c:    $(EXM)/pxrepeat.base
 	extract -b $? -o $@ precision=single
 
@@ -231,7 +235,7 @@ double: $(TGTSRC)/pdgssv.c \
 	$(TGTSRC)/pdgstrf_thread_finalize.c \
 	$(TGTSRC)/pdgstrf_thread_init.c \
 	$(TGTSRC)/pdmemory.c \
-	$(TGTSRC)/pdsp_defs.h \
+	$(TGTSRC)/slu_mt_ddefs.h \
 	$(TGTSRC)/pdutil.c \
 	$(TGTSRC)/dgscon.c \
 	$(TGTSRC)/dgsequ.c \
@@ -259,6 +263,7 @@ double: $(TGTSRC)/pdgssv.c \
 	$(TGTEXM)/pdlinsol.c \
 	$(TGTEXM)/pdlinsolx.c \
 	$(TGTEXM)/pdlinsolx1.c \
+	$(TGTEXM)/pdlinsolx2.c \
 	$(TGTEXM)/pdrepeat.c \
 	$(TGTEXM)/pdspmd.c
 
@@ -325,7 +330,7 @@ $(TGTSRC)/pdgstrf_thread_init.c:	$(SRC)/pxgstrf_thread_init.base
 $(TGTSRC)/pdmemory.c:	$(SRC)/pxmemory.base
 	extract -b $? -o $@ precision=double
 
-$(TGTSRC)/pdsp_defs.h:	$(SRC)/pxsp_defs.h.base
+$(TGTSRC)/slu_mt_ddefs.h:	$(SRC)/slu_mt_xdefs.h.base
 	extract -b $? -o $@ precision=double
 
 $(TGTSRC)/pdutil.c:	$(SRC)/pxutil.base
@@ -403,6 +408,9 @@ $(TGTEXM)/pdlinsolx.c:    $(EXM)/pxlinsolx.base
 $(TGTEXM)/pdlinsolx1.c:    $(EXM)/pxlinsolx1.base
 	extract -b $? -o $@ precision=double
 
+$(TGTEXM)/pdlinsolx2.c:    $(EXM)/pxlinsolx2.base
+	extract -b $? -o $@ precision=double
+
 $(TGTEXM)/pdrepeat.c:    $(EXM)/pxrepeat.base
 	extract -b $? -o $@ precision=double
 
@@ -431,7 +439,7 @@ scomplex: \
 	$(TGTSRC)/pcgstrf_thread_finalize.c \
 	$(TGTSRC)/pcgstrf_thread_init.c \
 	$(TGTSRC)/pcmemory.c \
-	$(TGTSRC)/pcsp_defs.h \
+	$(TGTSRC)/slu_mt_cdefs.h \
 	$(TGTSRC)/pcutil.c \
 	$(TGTSRC)/scomplex.c \
 	$(TGTSRC)/slu_scomplex.h \
@@ -461,6 +469,7 @@ scomplex: \
 	$(TGTEXM)/pclinsol.c \
 	$(TGTEXM)/pclinsolx.c \
 	$(TGTEXM)/pclinsolx1.c \
+	$(TGTEXM)/pclinsolx2.c \
 	$(TGTEXM)/pcrepeat.c \
 	$(TGTEXM)/pcspmd.c
 
@@ -527,7 +536,7 @@ $(TGTSRC)/pcgstrf_thread_init.c:	$(SRC)/pxgstrf_thread_init.base
 $(TGTSRC)/pcmemory.c:	$(SRC)/pxmemory.base
 	extract -b $? -o $@ precision=scomplex
 
-$(TGTSRC)/pcsp_defs.h:	$(SRC)/pxsp_defs.h.base
+$(TGTSRC)/slu_mt_cdefs.h:	$(SRC)/slu_mt_xdefs.h.base
 	extract -b $? -o $@ precision=scomplex
 
 $(TGTSRC)/pcutil.c:	$(SRC)/pxutil.base
@@ -611,6 +620,9 @@ $(TGTEXM)/pclinsolx.c:    $(EXM)/pxlinsolx.base
 $(TGTEXM)/pclinsolx1.c:    $(EXM)/pxlinsolx1.base
 	extract -b $? -o $@ precision=scomplex
 
+$(TGTEXM)/pclinsolx2.c:    $(EXM)/pxlinsolx2.base
+	extract -b $? -o $@ precision=scomplex
+
 $(TGTEXM)/pcrepeat.c:    $(EXM)/pxrepeat.base
 	extract -b $? -o $@ precision=scomplex
 
@@ -639,7 +651,7 @@ dcomplex: \
 	$(TGTSRC)/pzgstrf_thread_finalize.c \
 	$(TGTSRC)/pzgstrf_thread_init.c \
 	$(TGTSRC)/pzmemory.c \
-	$(TGTSRC)/pzsp_defs.h \
+	$(TGTSRC)/slu_mt_zdefs.h \
 	$(TGTSRC)/pzutil.c \
 	$(TGTSRC)/dcomplex.c \
 	$(TGTSRC)/slu_dcomplex.h \
@@ -669,6 +681,7 @@ dcomplex: \
 	$(TGTEXM)/pzlinsol.c \
 	$(TGTEXM)/pzlinsolx.c \
 	$(TGTEXM)/pzlinsolx1.c \
+	$(TGTEXM)/pzlinsolx2.c \
 	$(TGTEXM)/pzrepeat.c \
 	$(TGTEXM)/pzspmd.c
 
@@ -735,7 +748,7 @@ $(TGTSRC)/pzgstrf_thread_init.c:	$(SRC)/pxgstrf_thread_init.base
 $(TGTSRC)/pzmemory.c:	$(SRC)/pxmemory.base
 	extract -b $? -o $@ precision=dcomplex
 
-$(TGTSRC)/pzsp_defs.h:	$(SRC)/pxsp_defs.h.base
+$(TGTSRC)/slu_mt_zdefs.h:	$(SRC)/slu_mt_xdefs.h.base
 	extract -b $? -o $@ precision=dcomplex
 
 $(TGTSRC)/pzutil.c:	$(SRC)/pxutil.base
@@ -817,6 +830,9 @@ $(TGTEXM)/pzlinsolx.c:    $(EXM)/pxlinsolx.base
 	extract -b $? -o $@ precision=dcomplex
 
 $(TGTEXM)/pzlinsolx1.c:    $(EXM)/pxlinsolx1.base
+	extract -b $? -o $@ precision=dcomplex
+
+$(TGTEXM)/pzlinsolx2.c:    $(EXM)/pxlinsolx2.base
 	extract -b $? -o $@ precision=dcomplex
 
 $(TGTEXM)/pzrepeat.c:    $(EXM)/pxrepeat.base

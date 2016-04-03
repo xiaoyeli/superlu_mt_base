@@ -1,9 +1,19 @@
+/*! \file
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
 @extract -b Typedef.inc
-#include "p@(pre)sp_defs.h"
+#include "slu_mt_@(pre)defs.h"
 
 void
 p@(pre)gstrf_relax_snode(
-		    const int n, /* number of columns in the matrix */
+		    const int_t n, /* number of columns in the matrix */
 		    p@(pre)gstrf_options_t *p@(pre)gstrf_options,
 		    pxgstrf_relax_t *pxgstrf_relax /* relaxed s-nodes */
 		    )
@@ -21,11 +31,11 @@ p@(pre)gstrf_relax_snode(
  *   of the etree.
  *
  */ 
-    register int j, parent, rs;
-    register int fcol;	 /* beginning of a snode */
-    int *desc;  /* no of descendants of each etree node. */
-    int *etree = p@(pre)gstrf_options->etree; /* column elimination tree */
-    int relax = p@(pre)gstrf_options->relax; /* maximum no of columns allowed 
+    register int_t j, parent, rs;
+    register int_t fcol;	 /* beginning of a snode */
+    int_t *desc;  /* no of descendants of each etree node. */
+    int_t *etree = p@(pre)gstrf_options->etree; /* column elimination tree */
+    int_t relax = p@(pre)gstrf_options->relax; /* maximum no of columns allowed 
 					   in a relaxed s-node */
     
     desc = intCalloc(n+1);

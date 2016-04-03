@@ -15,6 +15,13 @@ at the top-level directory.
  * and Xerox Palo Alto Research Center.
  * September 10, 2007
  *
+ * Purpose:
+ * ========
+ * This example illustrates how to use the symmetric mode by setting:
+ *    permc_spec = 2;
+ *    superlumt_options.SymmetricMode = YES;
+ *    superlumt_options.diag_pivot_thresh = 0.0;
+ * 
  */
 #include "slu_mt_@(pre)defs.h"
 
@@ -38,7 +45,8 @@ main(int argc, char *argv[])
     void        *work;
     superlumt_options_t superlumt_options;
     int_t         info, lwork, nrhs, ldx, panel_size, relax;
-    int_t         m, n, nnz, permc_spec, i;
+    int_t         m, n, nnz, permc_spec;
+    int_t         i, firstfact;
     @(type)      *rhsb, *rhsx, *xact;
     @(mod_type)      *R, *C;
     @(mod_type)      *ferr, *berr;
@@ -68,7 +76,7 @@ main(int argc, char *argv[])
 	work = SUPERLU_MALLOC(lwork);
 	printf("Use work space of size LWORK = " IFMT " bytes\n", lwork);
 	if ( !work ) {
-	    SUPERLU_ABORT("@(PRE)LINSOLX: cannot allocate work[]");
+	    SUPERLU_ABORT("@(PRE)LINSOLX2: cannot allocate work[]");
 	}
     }
 
@@ -95,8 +103,10 @@ main(int argc, char *argv[])
 #elif defined( HB )
     @(pre)readhb(&m, &n, &nnz, &a, &asub, &xa);
 #else    
-    @(pre)readmt(&m, &n, &nnz, &a, &asub, &xa);
+    @(pre)readtriple(&m, &n, &nnz, &a, &asub, &xa);
 #endif
+
+    firstfact = (fact == FACTORED || refact == YES);
 
     @(pre)Create_CompCol_Matrix(&A, m, n, nnz, a, asub, xa, SLU_NC, @(Dtype_PRE), SLU_GE);
     Astore = A.Store;
@@ -113,7 +123,7 @@ main(int argc, char *argv[])
     
     if (!(perm_r = intMalloc(m))) SUPERLU_ABORT("Malloc fails for perm_r[].");
     if (!(perm_c = intMalloc(n))) SUPERLU_ABORT("Malloc fails for perm_c[].");
-    if (!(R = (@(mod_type) *) SUPERLU_MALLOC(A.nrow * sizeof(@(mod_type))))) 
+    if ( !(R = (@(mod_type) *) SUPERLU_MALLOC(A.nrow * sizeof(@(mod_type)))) ) 
         SUPERLU_ABORT("SUPERLU_MALLOC fails for R[].");
     if ( !(C = (@(mod_type) *) SUPERLU_MALLOC(A.ncol * sizeof(@(mod_type)))) )
         SUPERLU_ABORT("SUPERLU_MALLOC fails for C[].");
@@ -129,8 +139,11 @@ main(int argc, char *argv[])
      *   permc_spec = 2: minimum degree ordering on structure of A'+A
      *   permc_spec = 3: approximate minimum degree for unsymmetric matrices
      */    	
-    permc_spec = 1;
+    permc_spec = 2;
     get_perm_c(permc_spec, &A, perm_c);
+
+    superlumt_options.SymmetricMode = YES;
+    superlumt_options.diag_pivot_thresh = 0.0;
 
     superlumt_options.nprocs = nprocs;
     superlumt_options.fact = fact;
@@ -140,8 +153,6 @@ main(int argc, char *argv[])
     superlumt_options.relax = relax;
     superlumt_options.usepr = usepr;
     superlumt_options.drop_tol = drop_tol;
-    superlumt_options.diag_pivot_thresh = u;
-    superlumt_options.SymmetricMode = NO;
     superlumt_options.PrintStat = NO;
     superlumt_options.perm_c = perm_c;
     superlumt_options.perm_r = perm_r;
@@ -154,6 +165,10 @@ main(int argc, char *argv[])
     if ( !(superlumt_options.part_super_h = intMalloc(n)) )
 	SUPERLU_ABORT("Malloc fails for colcnt_h[].");
     
+    printf("sym_mode %d\tdiag_pivot_thresh %.4e\n", 
+	   superlumt_options.SymmetricMode,
+	   superlumt_options.diag_pivot_thresh);
+
     /* 
      * Solve the system and compute the condition number
      * and error bounds using pdgssvx.
@@ -162,7 +177,7 @@ main(int argc, char *argv[])
 	    &equed, R, C, &L, &U, &B, &X, &rpg, &rcond,
 	    ferr, berr, &superlu_memusage, &info);
 
-    printf("p@(pre)gssvx(): info " IFMT "\n", info);
+    printf("psgssvx(): info " IFMT "\n", info);
 
     if ( info == 0 || info == n+1 ) {
 
@@ -209,6 +224,7 @@ main(int argc, char *argv[])
     } else if ( lwork > 0 ) {
         SUPERLU_FREE(work);
     }
+
 }
 
 /*  

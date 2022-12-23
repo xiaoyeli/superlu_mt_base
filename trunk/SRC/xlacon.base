@@ -112,11 +112,11 @@ int_t
 @precision SINGLE DOUBLE
     extern int i@(pre)amax_(int *, @(type) *, int *);
     extern @(type) @(pre)asum_(int *, @(type) *, int *);
-    extern int @(pre)copy_(int *, @(type) *, int *, @(type) *, int *);
 @precision SCOMPLEX DCOMPLEX
     extern int i@(pre)max1_(int *, @(type) *, int *);
     extern double @(mod_pre)@(pre)sum1_(int *, @(type) *, int *);
 @precision ! 
+    extern int @(pre)copy_(int *, @(type) *, int *, @(type) *, int *);
 @precision SINGLE DOUBLE
 #define d_sign(a, b) (b >= 0 ? fabs(a) : -fabs(a))    /* Copy sign */
 #define i_dnnt(a) \

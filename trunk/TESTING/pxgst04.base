@@ -101,7 +101,7 @@ int_t p@(pre)gst04(int_t n, int_t nrhs, @(type) *x, int_t ldx, @(type) *xact,
     *resid = 0.;
     for (j = 0; j < nrhs; ++j) {
 	n__1 = n;
-	ix = idamax_(&n__1, &xact[j*ldxact], &c__1);
+	ix = i@(pre)amax_(&n__1, &xact[j*ldxact], &c__1);
 @precision SINGLE DOUBLE
         xnorm = (d__1 = xact[ix-1 + j*ldxact], fabs(d__1));
 @precision SCOMPLEX DCOMPLEX

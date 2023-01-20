@@ -29,10 +29,11 @@ at the top-level directory.
  * once, and re-used in the subsequent factorizations.
  * 
  */
+#include <unistd.h> 
 #include "slu_mt_@(pre)defs.h"
 
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     SuperMatrix A, AC, L, U, B;
     NCformat    *Astore;

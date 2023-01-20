@@ -23,10 +23,11 @@ at the top-level directory.
  *    superlumt_options.diag_pivot_thresh = 0.0;
  * 
  */
+#include <unistd.h> 
 #include "slu_mt_@(pre)defs.h"
 
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     SuperMatrix A, L, U;
     SuperMatrix B, X;

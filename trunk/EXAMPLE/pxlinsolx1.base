@@ -25,10 +25,11 @@ at the top-level directory.
  * P@(PRE)GSSVX: perm_c, etree, colcnt_h, part_super_h.
  *
  */
+#include <unistd.h> 
 #include "slu_mt_@(pre)defs.h"
 
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     SuperMatrix A, A1, L, U;
     SuperMatrix B, B1, X;

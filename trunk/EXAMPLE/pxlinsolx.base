@@ -16,10 +16,11 @@ at the top-level directory.
  * September 10, 2007
  *
  */
+#include <unistd.h>
 #include "slu_mt_@(pre)defs.h"
 
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     SuperMatrix A, L, U;
     SuperMatrix B, X;

@@ -28,6 +28,7 @@ at the top-level directory.
  * 
  */
 #include <stdlib.h> /* for getenv and atoi */
+#include <unistd.h> /* for the getopt function prototype */
 #include "slu_mt_@(pre)defs.h"
 
 
@@ -57,7 +58,7 @@ typedef struct {
 void *@(pre)spmd(void *);
 void *p@(pre)dot_thread(void *);
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     SuperMatrix A, AC, L, U, B;
     NCformat    *Astore;

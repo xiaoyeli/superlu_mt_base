@@ -3,11 +3,11 @@ TST = ./TESTING
 EXM = ./EXAMPLE
 BLS = ./CBLAS
 FOR = ./FORTRAN
-TGTSRC = ../superlu_mt/SRC
-TGTTST = ../superlu_mt/TESTING
-TGTEXM = ../superlu_mt/EXAMPLE
-TGTBLS = ../superlu_mt/CBLAS
-TGTFOR = ../superlu_mt/FORTRAN
+TGTSRC = ../NEXT/SRC
+TGTTST = ../NEXT/TESTING
+TGTEXM = ../NEXT/EXAMPLE
+TGTBLS = ../NEXT/CBLAS
+TGTFOR = ../NEXT/FORTRAN
 
 all: single double scomplex dcomplex
 
@@ -47,6 +47,7 @@ single: $(TGTSRC)/psgssv.c \
 	$(TGTSRC)/sreadhb.c \
 	$(TGTSRC)/sreadrb.c \
 	$(TGTSRC)/sreadmt.c \
+	$(TGTSRC)/sreadMM.c \
 	$(TGTSRC)/ssp_blas2.c \
 	$(TGTSRC)/ssp_blas3.c \
 	\
@@ -172,6 +173,9 @@ $(TGTSRC)/sreadrb.c:	$(SRC)/xreadrb.base
 $(TGTSRC)/sreadmt.c:	$(SRC)/xreadmt.base
 	extract -b $? -o $@ precision=single
 
+$(TGTSRC)/sreadMM.c:	$(SRC)/xreadMM.base
+	extract -b $? -o $@ precision=single
+
 $(TGTSRC)/ssp_blas2.c:	$(SRC)/xsp_blas2.base
 	extract -b $? -o $@ precision=single
 
@@ -250,6 +254,7 @@ double: $(TGTSRC)/pdgssv.c \
 	$(TGTSRC)/dreadhb.c \
 	$(TGTSRC)/dreadrb.c \
 	$(TGTSRC)/dreadmt.c \
+	$(TGTSRC)/dreadMM.c \
 	$(TGTSRC)/dsp_blas2.c \
 	$(TGTSRC)/dsp_blas3.c \
 	\
@@ -375,6 +380,9 @@ $(TGTSRC)/dreadrb.c:	$(SRC)/xreadrb.base
 $(TGTSRC)/dreadmt.c:	$(SRC)/xreadmt.base
 	extract -b $? -o $@ precision=double
 
+$(TGTSRC)/dreadMM.c:	$(SRC)/xreadMM.base
+	extract -b $? -o $@ precision=double
+
 $(TGTSRC)/dsp_blas2.c:	$(SRC)/xsp_blas2.base
 	extract -b $? -o $@ precision=double
 
@@ -456,6 +464,7 @@ scomplex: \
 	$(TGTSRC)/creadhb.c \
 	$(TGTSRC)/creadrb.c \
 	$(TGTSRC)/creadmt.c \
+	$(TGTSRC)/creadMM.c \
 	$(TGTSRC)/csp_blas2.c \
 	$(TGTSRC)/csp_blas3.c \
 	\
@@ -587,6 +596,9 @@ $(TGTSRC)/creadrb.c:	$(SRC)/xreadrb.base
 $(TGTSRC)/creadmt.c:	$(SRC)/xreadmt.base
 	extract -b $? -o $@ precision=scomplex
 
+$(TGTSRC)/creadMM.c:	$(SRC)/xreadMM.base
+	extract -b $? -o $@ precision=scomplex
+
 $(TGTSRC)/csp_blas2.c:	$(SRC)/xsp_blas2.base
 	extract -b $? -o $@ precision=scomplex
 
@@ -668,6 +680,7 @@ dcomplex: \
 	$(TGTSRC)/zreadhb.c \
 	$(TGTSRC)/zreadrb.c \
 	$(TGTSRC)/zreadmt.c \
+	$(TGTSRC)/zreadMM.c \
 	$(TGTSRC)/zsp_blas2.c \
 	$(TGTSRC)/zsp_blas3.c \
 	\
@@ -797,6 +810,9 @@ $(TGTSRC)/zreadrb.c:	$(SRC)/xreadrb.base
 	extract -b $? -o $@ precision=dcomplex
 
 $(TGTSRC)/zreadmt.c:	$(SRC)/xreadmt.base
+	extract -b $? -o $@ precision=dcomplex
+
+$(TGTSRC)/zreadMM.c:	$(SRC)/xreadMM.base
 	extract -b $? -o $@ precision=dcomplex
 
 $(TGTSRC)/zsp_blas2.c:	$(SRC)/xsp_blas2.base

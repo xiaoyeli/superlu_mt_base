@@ -58,7 +58,8 @@ int main(int argc, char *argv[])
     printf("int_t %d bytes\n", sizeof(int_t));
 #endif
 
-#define HB
+#undef HB
+
 #if defined( DEN )
     m = n;
     nnz = n * n;
@@ -75,8 +76,8 @@ int main(int argc, char *argv[])
     @(pre)blockdiag(nb, bs, nnz, &a, &asub, &xa);
 #elif defined( HB )
     @(pre)readhb(&m, &n, &nnz, &a, &asub, &xa);
-#else    
-    @(pre)readmt(&m, &n, &nnz, &a, &asub, &xa);
+#else 
+    @(pre)readMM(&m, &n, &nnz, &a, &asub, &xa);
 #endif
 
     @(pre)Create_CompCol_Matrix(&A, m, n, nnz, a, asub, xa, SLU_NC, @(Dtype_PRE), SLU_GE);

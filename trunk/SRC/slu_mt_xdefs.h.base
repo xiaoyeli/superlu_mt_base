@@ -419,6 +419,7 @@ extern void compressSUP (const int_t, GlobalLU_t *);
 extern int_t  *TreePostorder (int_t, int_t *);
 extern void @(pre)readmt (int_t *, int_t *, int_t *, @(type) **, int_t **, int_t **);
 extern void @(pre)readhb (int_t *, int_t *, int_t *, @(type) **, int_t **, int_t **);
+extern void @(pre)readMM (int *m, int *n, int_t *nonz, @(type) **nzval, int_t **rowind, int_t **colptr);
 extern void @(pre)GenXtrue (int_t, int_t, @(type) *, int_t);
 extern void @(pre)FillRHS (trans_t, int_t, @(type) *, int_t, 
 		      SuperMatrix *, SuperMatrix *);
@@ -455,6 +456,7 @@ extern void p@(pre)gstrf_SetRWork (int_t, int_t, @(type) *, @(type) **, @(type) 
 extern void p@(pre)gstrf_WorkFree (int_t *, @(type) *, GlobalLU_t *);
 extern int_t  p@(pre)gstrf_MemXpand (int_t, int_t, MemType, int_t *, GlobalLU_t *);
 
+extern int    *int32Malloc(int);
 extern int_t  *intMalloc (int_t);
 extern int_t  *intCalloc (int_t);
 extern @(type) *@(type)Malloc(int_t);
@@ -470,7 +472,7 @@ extern int_t  Glu_alloc (const int_t, const int_t, const int_t, const MemType,
    -------------------*/
 extern double  SuperLU_timer_();
 extern int_t     sp_ienv(int_t);
-extern double  @(mod_pre)lamch_();
+extern double  @(mod_pre)lamch_(char *);
 extern int     lsame_(char *, char *);
 extern int     xerbla_(char *, int *);
 extern void    superlu_abort_and_exit(char *);

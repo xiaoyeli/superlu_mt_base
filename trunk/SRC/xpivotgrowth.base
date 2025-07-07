@@ -68,9 +68,6 @@ at the top-level directory.
 @precision !
     @(mod_type)   smlnum;
     @(type)   *luval;
-@precision DCOMPLEX SCOMPLEX
-    @(type)   temp_comp;
-@precision !
    
     /* Get machine constants. */
 @precision DOUBLE DCOMPLEX

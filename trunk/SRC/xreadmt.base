@@ -26,7 +26,7 @@ at the top-level directory.
 static void dumptitle();
 
 void
-@(pre)readmt(int *m, int *n, int *nonz, @(type) **nzval, int **rowind, int **colptr)
+@(pre)readmt(int_t *m, int_t *n, int_t *nonz, @(type) **nzval, int_t **rowind, int_t **colptr)
 {
 /*
  * Output parameters

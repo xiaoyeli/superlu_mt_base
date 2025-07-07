@@ -64,7 +64,10 @@ int_t p@(pre)gst01(int_t m, int_t n, SuperMatrix *A, SuperMatrix *L,
     @(type)      zero = {0.0, 0.0};
 @precision !
     int_t i, j, k, arow, lptr,isub,  urow, superno, fsupc, u_part;
-    @(type) utemp, comp_temp;
+    @(type) utemp;
+@precision SCOMPLEX DCOMPLEX
+    @(type) comp_temp;
+@precision !
     @(mod_type) anorm, tnorm, cnorm;
     @(mod_type) eps;
     @(type) *work;

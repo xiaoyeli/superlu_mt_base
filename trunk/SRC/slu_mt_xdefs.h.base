@@ -419,7 +419,7 @@ extern void compressSUP (const int_t, GlobalLU_t *);
 extern int_t  *TreePostorder (int_t, int_t *);
 extern void @(pre)readmt (int_t *, int_t *, int_t *, @(type) **, int_t **, int_t **);
 extern void @(pre)readhb (int_t *, int_t *, int_t *, @(type) **, int_t **, int_t **);
-extern void @(pre)readMM (int *m, int *n, int_t *nonz, @(type) **nzval, int_t **rowind, int_t **colptr);
+extern void @(pre)readMM (int_t *m, int_t *n, int_t *nonz, @(type) **nzval, int_t **rowind, int_t **colptr);
 extern void @(pre)GenXtrue (int_t, int_t, @(type) *, int_t);
 extern void @(pre)FillRHS (trans_t, int_t, @(type) *, int_t, 
 		      SuperMatrix *, SuperMatrix *);
